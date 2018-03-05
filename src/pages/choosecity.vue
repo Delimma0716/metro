@@ -9,7 +9,7 @@
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'
-import Axios from 'axios'
+import axios from 'axios'
 export default {
   mounted() {},
   methods: {
@@ -24,7 +24,10 @@ export default {
       this.$router.push('metromap')
       // 设置标题
       this.$store.commit('setHeaderTitle', '首页')
-      Axios.get('http://map.amap.com/service/subway', {srhdata: '3100_drw_shanghai.json'}).then(res=>{console.log(res)})
+
+      axios.get('http://127.0.0.1:3000').then(res=>{
+           console.log(res.list)
+      })
     }
   },
   data() {

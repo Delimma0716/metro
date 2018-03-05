@@ -23,5 +23,5 @@ new Vue({
     App
   },
   template: '<App/>',
-  store,
+  store
 })
