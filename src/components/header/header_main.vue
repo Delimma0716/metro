@@ -13,7 +13,7 @@
     </mu-drawer>
     <mu-bottom-sheet :open="bottomSheet" @close="closeBottomSheet">
       <mu-list @itemClick="closeBottomSheet">
-        <mu-picker :slots="stationSlots" :visible-item-count="5" @change="stationChange" :values="station" />
+        <mu-picker :slots="stationSlots" :visible-item-count="5" @change="stationChange" :values="stations" />
       </mu-list>
     </mu-bottom-sheet>
   </div>
@@ -22,33 +22,8 @@
 <script>
 import StationList from '@/components/list/stationlist'
 import { mapState, mapGetters } from 'vuex'
-const station = {
-  北京: ['北京'],
-  广东: [
-    '广州',
-    '深圳',
-    '珠海',
-    '汕头',
-    '韶关',
-    '佛山',
-    '江门',
-    '湛江',
-    '茂名',
-    '肇庆',
-    '惠州',
-    '梅州',
-    '汕尾',
-    '河源',
-    '阳江',
-    '清远',
-    '东莞',
-    '中山',
-    '潮州',
-    '揭阳',
-    '云浮'
-  ],
-  上海: ['上海']
-}
+import axios from 'axios'
+
 export default {
   data() {
     return {
@@ -57,37 +32,27 @@ export default {
       paths: this.$router.options.routes[0].children,
       hasTitie: false,
 
+      // 弹出框数据
       bottomSheet: false,
-      stationSlots: [
-        {
-          width: '100%',
-          textAlign: 'right',
-          values: Object.keys(station)
-        },
-        {
-          width: '100%',
-          textAlign: 'left',
-          values: ['北京']
-        }
-      ],
-      station: ['北京', '北京'],
-      stationProvince: '北京',
-      stationCity: '北京'
+      lines: {},
+      stationSlots: [],
+      stations: [],
+      stationProvince: '',
+      stationCity: ''
     }
   },
+
   mounted() {
-    // console.log(this.getLines)
+    // 获取所有线路
   },
+
   computed: {
     ...mapState({
       // 标题
       title: 'headerTitle'
-    }),
-    ...mapGetters({
-      // 获取所有线路
-      lines: 'getLines'
     })
   },
+
   methods: {
     // 打开侧边菜单
     toggle(flag) {
@@ -102,20 +67,61 @@ export default {
       this.$store.commit('setHeaderTitle', this.$route.name)
     },
 
+    // 底部关闭选择线路
     closeBottomSheet() {
       this.bottomSheet = false
     },
+
     // 底部弹出选择线路
     openBottomSheet() {
-      this.bottomSheet = true
-      console.log(this.lines)
-      // this.station=this.getLines
+      // 获取所有线路
+      axios
+        .post('http://127.0.0.1:3000', {
+          code: this.$store.state.currentCityInfo.code,
+          city: this.$store.state.currentCityInfo.city
+        })
+        .then(res => {
+          let linelist = res.data.data.l
+          console.log(res.data.data.l)
+          linelist.forEach(line => {
+            // 渲染数据
+            let linename = (line.ln + ' ' + line.la).trim()
+            this.lines[linename] = []
+            line.st.forEach(stat => {
+              this.lines[linename].push(stat.n)
+            })
+          })
+          console.log(this.lines)
+          this.stationSlots = [
+            {
+              width: '100%',
+              textAlign: 'left',
+              values: Object.keys(this.lines)
+            },
+            {
+              width: '100%',
+              textAlign: 'left',
+              values: this.lines[Object.keys(this.lines)[0]]
+            }
+          ]
+          this.stations = [
+            Object.keys(this.lines)[0],
+            this.lines[Object.keys(this.lines)[0]][0]
+          ]
+          this.stationProvince = '北京'
+          this.stationCity = '北京'
+
+          this.bottomSheet = true
+        })
+      // 渲染数据
     },
+
+    // 选择站点
     stationChange(value, index) {
       switch (index) {
         case 0:
           this.stationProvince = value
-          const arr = station[value]
+          const arr = this.lines[value]
           this.stationSlots[1].values = arr
           this.stationCity = arr[0]
           break
@@ -123,7 +129,7 @@ export default {
           this.stationCity = value
           break
       }
-      this.station = [this.stationProvince, this.stationCity]
+      this.stations = [this.stationProvince, this.stationCity]
     }
   }
 }

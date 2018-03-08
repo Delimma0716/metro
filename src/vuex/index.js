@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -45,17 +44,6 @@ const store = new Vuex.Store({
       })
       return cities
     },
-
-    /**
-     * 获取当前城市所有线路信息
-     */
-    getLines: state => {
-      let lines = []
-      axios.get('http://127.0.0.1:3000/').then(res=>{
-        console.log(res)
-   })
-      return lines
-    }
   }
 })
 

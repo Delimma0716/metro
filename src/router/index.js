@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Index from '@/pages/index'
 import Choosecity from '@/pages/choosecity'
-import Stations from '@/pages/stations'
+import Linelist from '@/pages/linelist'
 import Metromap from '@/components/map/metromap'
 
 Vue.use(VueRouter)
@@ -22,19 +22,19 @@ const routes = [{
       component: Choosecity
     },
     {
-      path: 'stations',
+      path: 'linelist',
       name: '站点信息',
-      component: Stations
+      component: Linelist
     },
     {
       path: 'transfer',
       name: '换乘查询',
-      component: Stations
+      component: Linelist
     },
     {
       path: 'settings',
       name: '设置',
-      component: Stations
+      component: Linelist
     }
   ]
 }]

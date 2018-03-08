@@ -17,14 +17,13 @@ export default {
   },
   mounted() {
     // 预留1s加载数据
-    setTimeout(()=>{
-      this.showLoading=false
+    setTimeout(() => {
+      this.showLoading = false
       this.init()
-    },1000)
-    
+    }, 1000)
   },
-  methods:{
-    init(){
+  methods: {
+    init() {
       this.map = subway('mainmap', {
         // 上海的adcode
         adcode: this.$store.state.currentCityInfo.code,
@@ -33,7 +32,7 @@ export default {
       })
       // console.log('created:', document.getElementById('drag_handle'))
       // 让地图在下层
-      document.getElementById('drag_handle').style.position='relative'
+      document.getElementById('drag_handle').style.position = 'relative'
       // 地图加载完之后才能获取到所有线路
       this.map.event.on('subway.complete', () => {
         // 设置当前城市地图
@@ -41,10 +40,9 @@ export default {
       })
     }
   },
-  components:{
-    'm-loading':Loading
+  components: {
+    'm-loading': Loading
   }
-  
 }
 </script>
 
@@ -54,7 +52,6 @@ export default {
   position: relative;
   overflow: hidden;
 }
-
 </style>
 
 
