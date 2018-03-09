@@ -37,8 +37,8 @@ export default {
       lines: {},
       stationSlots: [],
       stations: [],
-      stationProvince: '',
-      stationCity: ''
+      stationLine: '',
+      stationName: ''
     }
   },
 
@@ -67,16 +67,11 @@ export default {
       this.$store.commit('setHeaderTitle', this.$route.name)
     },
 
-    // 底部关闭选择线路
-    closeBottomSheet() {
-      this.bottomSheet = false
-    },
-
     // 底部弹出选择线路
     openBottomSheet() {
       // 获取所有线路
       axios
-        .post('http://127.0.0.1:3000', {
+        .post('http://127.0.0.1:3000/map/getlines', {
           code: this.$store.state.currentCityInfo.code,
           city: this.$store.state.currentCityInfo.city
         })
@@ -108,28 +103,36 @@ export default {
             Object.keys(this.lines)[0],
             this.lines[Object.keys(this.lines)[0]][0]
           ]
-          this.stationProvince = '北京'
-          this.stationCity = '北京'
+          this.stationLine = this.stations[0]
+          this.stationName = this.stations[1]
 
           this.bottomSheet = true
         })
-      // 渲染数据
+    },
+
+    // 底部关闭选择线路
+    closeBottomSheet() {
+      // 将站名填充到输入框
+
+
+      
+      this.bottomSheet = false
     },
 
     // 选择站点
     stationChange(value, index) {
       switch (index) {
         case 0:
-          this.stationProvince = value
+          this.stationLine = value
           const arr = this.lines[value]
           this.stationSlots[1].values = arr
-          this.stationCity = arr[0]
+          this.stationName = arr[0]
           break
         case 1:
-          this.stationCity = value
+          this.stationName = value
           break
       }
-      this.stations = [this.stationProvince, this.stationCity]
+      this.stations = [this.stationLine, this.stationName]
     }
   }
 }
