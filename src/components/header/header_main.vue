@@ -159,9 +159,6 @@ export default {
 .header {
   color: #fff;
   width: 100%;
-  .mu-appbar {
-    // position: absolute;
-  }
   .title {
     color: #fff;
     font-size: 18px;
