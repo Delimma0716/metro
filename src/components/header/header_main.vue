@@ -114,8 +114,6 @@ export default {
     closeBottomSheet() {
       // 将站名填充到输入框
 
-
-      
       this.bottomSheet = false
     },
 
