@@ -30,7 +30,6 @@ export default {
         theme: 'colorful',
         easy: 1
       })
-      // console.log('created:', document.getElementById('drag_handle'))
       // 让地图在下层
       document.getElementById('drag_handle').style.position = 'relative'
       // 地图加载完之后才能获取到所有线路
