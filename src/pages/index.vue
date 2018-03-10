@@ -1,4 +1,4 @@
-// 包含sidebar header contentbox
+// 包含header和contentbox
 <template>
   <div>
     <m-header></m-header>
