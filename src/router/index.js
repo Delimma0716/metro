@@ -4,6 +4,9 @@ import Index from '@/pages/index'
 import Choosecity from '@/pages/choosecity'
 import Linelist from '@/pages/linelist'
 import Metromap from '@/components/map/metromap'
+import Settings from '@/pages/settings'
+import Login from '@/pages/login'
+import User from '@/pages/user'
 
 Vue.use(VueRouter)
 
@@ -34,8 +37,18 @@ const routes = [{
     {
       path: 'settings',
       name: '设置',
-      component: Linelist
-    }
+      component: Settings
+    },
+    {
+      path: 'login',
+      name: '登录',
+      component: Login
+    },
+    {
+      path: 'user',
+      name: '个人中心',
+      component: User
+    },
   ]
 }]
 

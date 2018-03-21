@@ -1,16 +1,22 @@
 <template>
   <div class="header">
+    <!-- 搜索栏 -->
     <mu-appbar>
       <mu-icon-button icon="menu" slot="left" @click="toggle(true)" />
       <mu-text-field v-if="title === '首页'" icon="search" class="appbar-search-field" slot="right" hintText="搜索站点" @focus="openBottomSheet" />
       <mu-flat-button v-if="title === '首页'" color="white" label="取消" slot="right" />
       <span v-if="title !== '首页'" class="title">{{title}}</span>
     </mu-appbar>
+    <!-- 侧边菜单 -->
     <mu-drawer :open="open" :docked="docked" @close="toggle()">
       <mu-list @itemClick="docked ? '' : toggle()">
+        <mu-list-item :title="userName" @click="login">
+          <mu-avatar src="/images/avatar1.jpg" slot="leftAvatar" />
+        </mu-list-item>
         <mu-list-item v-for="path in paths" :title="path.name" @click="go(path.name)" />
       </mu-list>
     </mu-drawer>
+    <!-- 选择站点 -->
     <mu-bottom-sheet :open="bottomSheet" @close="closeBottomSheet">
       <mu-list @itemClick="closeBottomSheet">
         <mu-picker :slots="stationSlots" :visible-item-count="5" @change="stationChange" :values="stations" />
@@ -20,7 +26,6 @@
 </template>
 
 <script>
-import StationList from '@/components/list/stationlist'
 import { mapState, mapGetters } from 'vuex'
 import axios from 'axios'
 
@@ -29,8 +34,10 @@ export default {
     return {
       open: false,
       docked: true,
-      paths: this.$router.options.routes[0].children,
+      paths: this.$router.options.routes[0].children.slice(0, 5),
       hasTitie: false,
+      userName: '',
+      isLog: false,
 
       // 弹出框数据
       bottomSheet: false,
@@ -43,7 +50,8 @@ export default {
   },
 
   mounted() {
-    // 获取所有线路
+    // 获取用户名
+    this.userName = '登录'
   },
 
   computed: {
@@ -131,6 +139,17 @@ export default {
           break
       }
       this.stations = [this.stationLine, this.stationName]
+    },
+
+    // 登录
+    login() {
+      if (!this.isLog) {
+        this.$router.push('user')
+      } else {
+        this.$router.push('login')
+      }
+      // 更改标题
+      this.$store.commit('setHeaderTitle', this.$route.name)
     }
   }
 }
@@ -163,6 +182,8 @@ export default {
     display: block;
     text-align: center;
     margin-right: 48px;
+  }
+  .user {
   }
 }
 </style>

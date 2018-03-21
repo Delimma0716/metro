@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 
 const mapRouter = require('./router/mapRouter')
+const userRouter = require('./router/userRouter')
 
 // 中间件
 app.use((req, res, next) => {
@@ -14,6 +15,8 @@ app.use((req, res, next) => {
 
 // 与地铁图有关的路由
 app.use('/map', mapRouter)
+// 与用户有关的路由
+app.use('/user', userRouter)
 
 const server = app.listen(3000, function () {
   const host = server.address().address
