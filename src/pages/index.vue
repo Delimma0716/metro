@@ -16,6 +16,15 @@ export default {
   components: {
     'm-header': Header,
     'm-subheader': SubHeader
+  },
+  watch:{
+    '$route':'setHeader'
+  },
+  methods:{
+    // 设置导航栏标题
+    setHeader(){
+      this.$store.commit('setHeaderTitle', this.$route.name)
+    }
   }
 }
 </script>

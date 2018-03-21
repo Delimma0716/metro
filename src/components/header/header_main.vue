@@ -71,8 +71,6 @@ export default {
     // 选择页面
     go(path) {
       this.$router.push({ name: path })
-      // 更改标题
-      this.$store.commit('setHeaderTitle', this.$route.name)
     },
 
     // 底部弹出选择线路
@@ -143,13 +141,12 @@ export default {
 
     // 登录
     login() {
-      if (!this.isLog) {
+      // 已登录则进入用户中心
+      if (this.isLog) {
         this.$router.push('user')
       } else {
         this.$router.push('login')
       }
-      // 更改标题
-      this.$store.commit('setHeaderTitle', this.$route.name)
     }
   }
 }
