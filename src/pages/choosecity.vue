@@ -7,13 +7,14 @@
     </mu-list>
   </div>
 </template>
+
 <script>
 import { mapState, mapGetters } from 'vuex'
 export default {
-  mounted() {},
+  mounted () { },
   methods: {
     // 更改当前城市
-    choose(item) {
+    choose (item) {
       this.cityInfo.code = item.$options.propsData.value
       this.cityInfo.name = item.$options.propsData.title
       this.cityInfo.city = item.$options.propsData.describeText
@@ -25,7 +26,7 @@ export default {
       this.$store.commit('setHeaderTitle', '首页')
     }
   },
-  data() {
+  data () {
     return {
       cityInfo: {
         code: '',
@@ -53,4 +54,3 @@ export default {
   }
 }
 </style>
-

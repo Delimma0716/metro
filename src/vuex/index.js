@@ -18,15 +18,15 @@ const store = new Vuex.Store({
   },
   mutations: {
     // 更改当前城市
-    setCurrentCityMap(state, map) {
+    setCurrentCityMap (state, map) {
       state.currentCityMap = map
     },
     // 更改当前城市信息
-    setCurrentCityInfo(state, cityInfo) {
+    setCurrentCityInfo (state, cityInfo) {
       state.currentCityInfo = cityInfo
     },
     // 更改标题
-    setHeaderTitle(state, headerTitle) {
+    setHeaderTitle (state, headerTitle) {
       state.headerTitle = headerTitle
     }
   },

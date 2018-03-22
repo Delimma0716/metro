@@ -30,7 +30,7 @@ import { mapState, mapGetters } from 'vuex'
 import axios from 'axios'
 
 export default {
-  data() {
+  data () {
     return {
       open: false,
       docked: true,
@@ -49,7 +49,7 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     // 获取用户名
     this.userName = '登录'
   },
@@ -63,18 +63,18 @@ export default {
 
   methods: {
     // 打开侧边菜单
-    toggle(flag) {
+    toggle (flag) {
       this.open = !this.open
       this.docked = !flag
     },
 
     // 选择页面
-    go(path) {
+    go (path) {
       this.$router.push({ name: path })
     },
 
     // 底部弹出选择线路
-    openBottomSheet() {
+    openBottomSheet () {
       // 获取所有线路
       axios
         .post('http://127.0.0.1:3000/map/getlines', {
@@ -117,14 +117,14 @@ export default {
     },
 
     // 底部关闭选择线路
-    closeBottomSheet() {
+    closeBottomSheet () {
       // 将站名填充到输入框
 
       this.bottomSheet = false
     },
 
     // 选择站点
-    stationChange(value, index) {
+    stationChange (value, index) {
       switch (index) {
         case 0:
           this.stationLine = value
@@ -140,7 +140,7 @@ export default {
     },
 
     // 登录
-    login() {
+    login () {
       // 已登录则进入用户中心
       if (this.isLog) {
         this.$router.push('user')

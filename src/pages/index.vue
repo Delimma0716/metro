@@ -1,4 +1,3 @@
-// 包含header和contentbox
 <template>
   <div>
     <m-header></m-header>

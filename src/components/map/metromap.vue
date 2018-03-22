@@ -8,14 +8,14 @@
 <script>
 import Loading from '@/components/tools/loading'
 export default {
-  data() {
+  data () {
     return {
       map: '',
       lines: [],
       showLoading: true
     }
   },
-  mounted() {
+  mounted () {
     // 预留0.5s加载数据
     setTimeout(() => {
       this.showLoading = false
@@ -23,7 +23,7 @@ export default {
     }, 500)
   },
   methods: {
-    init() {
+    init () {
       this.map = subway('mainmap', {
         // 上海的adcode
         adcode: this.$store.state.currentCityInfo.code,
@@ -52,5 +52,3 @@ export default {
   overflow: hidden;
 }
 </style>
-
-

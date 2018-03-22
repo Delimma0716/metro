@@ -8,7 +8,6 @@ import MuseUI from 'muse-ui'
 import Less from 'less'
 import 'muse-ui/dist/muse-ui.css'
 import 'muse-ui/dist/theme-carbon.css'
-// import 'muse-ui/dist/theme-light.css'
 
 Vue.config.productionTip = false
 

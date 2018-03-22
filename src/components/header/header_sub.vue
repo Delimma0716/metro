@@ -17,22 +17,22 @@
 <script>
 import StationList from '@/components/list/stationlist'
 export default {
-  data() {
+  data () {
     return {
       open: false,
       docked: true,
       paths: this.$router.options.routes[0].children
     }
   },
-  mounted() {
+  mounted () {
     // console.log(this.paths)
   },
   methods: {
-    toggle(flag) {
+    toggle (flag) {
       this.open = !this.open
       this.docked = !flag
     },
-    go(path) {
+    go (path) {
       this.$router.push({ name: path })
     }
   },

@@ -29,6 +29,10 @@
     </div>
 </template>
 
+<script>
+export default {}
+</script>
+
 <style lang="less" scoped>
 .box {
   .list {
@@ -36,7 +40,3 @@
   }
 }
 </style>
-
-<script>
-export default {}
-</script>
