@@ -16,11 +16,11 @@ export default {
     }
   },
   mounted() {
-    // 预留1s加载数据
+    // 预留0.5s加载数据
     setTimeout(() => {
       this.showLoading = false
       this.init()
-    }, 1000)
+    }, 500)
   },
   methods: {
     init() {

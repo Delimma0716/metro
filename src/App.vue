@@ -6,10 +6,7 @@
 
 <script>
 export default {
-  name: 'App',
-  mounted() {
-    
-  }
+  name: 'App'
 }
 </script>
 

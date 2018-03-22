@@ -35,7 +35,6 @@ const store = new Vuex.Store({
      * 获取所有城市信息二维数组
      * 0:code
      * 1:{pinyin,name}
-     * 
      **/
     getCities: state => {
       let cities = []
@@ -43,7 +42,7 @@ const store = new Vuex.Store({
         cities = Object.entries(list)
       })
       return cities
-    },
+    }
   }
 })
 

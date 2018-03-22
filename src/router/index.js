@@ -48,7 +48,7 @@ const routes = [{
       path: 'user',
       name: '个人中心',
       component: User
-    },
+    }
   ]
 }]
 

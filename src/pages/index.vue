@@ -10,19 +10,19 @@
 import Header from '@/components/header/header_main'
 import SubHeader from '@/components/header/header_sub'
 export default {
-  mounted() {
+  mounted () {
     this.$router.push('metromap')
   },
   components: {
     'm-header': Header,
     'm-subheader': SubHeader
   },
-  watch:{
-    '$route':'setHeader'
+  watch: {
+    $route: 'setHeader'
   },
-  methods:{
+  methods: {
     // 设置导航栏标题
-    setHeader(){
+    setHeader () {
       this.$store.commit('setHeaderTitle', this.$route.name)
     }
   }
