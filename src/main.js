@@ -7,7 +7,7 @@ import store from './vuex'
 import MuseUI from 'muse-ui'
 import Less from 'less'
 import 'muse-ui/dist/muse-ui.css'
-import 'muse-ui/dist/theme-carbon.css'
+import '@/assets/css/theme-carbon.css'
 
 Vue.config.productionTip = false
 

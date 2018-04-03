@@ -3,8 +3,8 @@
     <!-- 搜索栏 -->
     <mu-appbar>
       <mu-icon-button icon="menu" slot="left" @click="toggle(true)" />
-      <mu-text-field v-if="title === '首页'" icon="search" class="appbar-search-field" slot="right" hintText="搜索站点" @focus="openBottomSheet" />
-      <mu-flat-button v-if="title === '首页'" color="white" label="取消" slot="right" />
+      <mu-text-field v-if="title === '首页'" class="appbar-search-field" slot="right" hintText="所有站点" @focus="openBottomSheet" v-model="stationName"/>
+      <mu-flat-button v-if="title === '首页'" icon="search" color="white" label="搜索" slot="right" />
       <span v-if="title !== '首页'" class="title">{{title}}</span>
     </mu-appbar>
     <!-- 侧边菜单 -->
@@ -18,9 +18,7 @@
     </mu-drawer>
     <!-- 选择站点 -->
     <mu-bottom-sheet :open="bottomSheet" @close="closeBottomSheet">
-      <mu-list @itemClick="closeBottomSheet">
-        <mu-picker :slots="stationSlots" :visible-item-count="5" @change="stationChange" :values="stations" />
-      </mu-list>
+      <mu-picker :slots="stationSlots" :visible-item-count="5" @change="stationChange" :values="stations" />
     </mu-bottom-sheet>
   </div>
 </template>
@@ -83,7 +81,6 @@ export default {
         })
         .then(res => {
           let linelist = res.data.data.l
-          console.log(res.data.data.l)
           linelist.forEach(line => {
             // 渲染数据
             let linename = (line.ln + ' ' + line.la).trim()
@@ -92,7 +89,6 @@ export default {
               this.lines[linename].push(stat.n)
             })
           })
-          console.log(this.lines)
           this.stationSlots = [
             {
               width: '100%',
@@ -111,15 +107,13 @@ export default {
           ]
           this.stationLine = this.stations[0]
           this.stationName = this.stations[1]
-
+          console.log(this.stationName)
           this.bottomSheet = true
         })
     },
 
     // 底部关闭选择线路
     closeBottomSheet () {
-      // 将站名填充到输入框
-
       this.bottomSheet = false
     },
 
@@ -136,6 +130,7 @@ export default {
           this.stationName = value
           break
       }
+      
       this.stations = [this.stationLine, this.stationName]
     },
 
@@ -154,21 +149,8 @@ export default {
 
 <style lang="less" scoped>
 .appbar-search-field {
-  color: #fff;
   margin-bottom: 0;
   width: 80%;
-  under &.focus-state {
-    color: #fff;
-  }
-  .mu-text-field-hint {
-    color: fade(#fff, 54%);
-  }
-  .mu-text-field-input {
-    color: #fff;
-  }
-  .mu-text-field-focus-line {
-    background-color: #fff;
-  }
 }
 .header {
   color: #fff;
