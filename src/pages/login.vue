@@ -1,13 +1,20 @@
 <template>
   <div class="login">
-    <mu-paper class="loginpaper" :zDepth="1">
+    <mu-paper class="paper" :zDepth="1" v-show="showLog">
       <mu-text-field hintText="用户名" v-model="name" /><br/>
       <mu-text-field type="password" hintText="密码" v-model="pwd" /><br/>
       <mu-raised-button label="登录" class="demo-raised-button" @click="login" />
-      <mu-raised-button label="直接注册" class="demo-raised-button" primary @click="reg" />
+      <mu-raised-button label="去注册" class="demo-raised-button" primary @click="change" />
+    </mu-paper>
+    <mu-paper class="paper" :zDepth="1" v-show="!showLog">
+      <mu-text-field hintText="用户名" v-model="name" /><br/>
+      <mu-text-field type="password" hintText="密码" v-model="pwd" /><br/>
+      <mu-text-field type="password" hintText="再次输入密码" v-model="pwd2" /><br/>
+      <mu-raised-button label="注册" class="demo-raised-button" @click="reg" />
+      <mu-raised-button label="去登录" class="demo-raised-button" primary @click="change" />
     </mu-paper>
     <mu-dialog :open="dialog" @close="close">
-      <span v-bind="hintmsg"></span>
+      <span>{{hintmsg}}</span>
       <mu-flat-button slot="actions" primary @click="close" label="确定" />
     </mu-dialog>
   </div>
@@ -19,27 +26,46 @@ export default {
     return {
       name: '',
       pwd: '',
+      pwd2: '',
       dialog: false,
-      hintmsg: []
+      hintmsg: '',
+      showLog: true
     }
   },
   methods: {
+    // 清空数据
+    clear () {
+      this.name = ''
+      this.pwd = ''
+      this.pwd2 = ''
+      this.hintmsg = ''
+    },
     // 登录
     login () {
-      console.log('dl')
+      if (this.name === '' || this.pwd === '') {
+        this.hintmsg = '用户名或密码未填写完整'
+        this.open()
+      } else {
+
+      }
     },
     // 注册
     reg () {
       if (this.name && this.pwd) {
-        if (this.pwd.length < 6) {
-          this.hintmsg = '密码不能小于6位'
+        if (this.pwd !== this.pwd2) {
+          this.hintmsg = '两次密码不一致'
           this.open()
+        } else {
+
         }
-        console.log('zc')
       } else {
-        this.hintmsg = '用户名或密码不能为空'
+        this.hintmsg = '用户名或密码未填写完整'
         this.open()
       }
+    },
+    change () {
+      this.clear()
+      this.showLog = !this.showLog
     },
     open () {
       this.dialog = true
@@ -53,9 +79,8 @@ export default {
 
 <style lang="less" scoped>
 .login {
-  .loginpaper {
+  .paper {
     width: 80%;
-    height: 200px;
     margin: 0 auto;
     margin-top: 10%;
     padding: 20px;
