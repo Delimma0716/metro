@@ -11,11 +11,11 @@ const data = {}
 
 // 登录
 userRouter.post('/login', (req, res) => {
-  let account = req.body.account
+  let username = req.body.username
   let password = req.body.password
   // 查询用户表
   let sql = "select userPwd from user where userName = ?"
-  db.query(sql, [account], (err, rows) => {
+  db.query(sql, [username], (err, rows) => {
     if (err) {
       data.retCode = 0
       data.msg = '系统内部错误'
@@ -27,7 +27,7 @@ userRouter.post('/login', (req, res) => {
         data.msg = '用户名不存在'
         res.json(data)
       } else {
-        if (rows[0].user_password === password) {
+        if (rows[0].userPwd === password) {
           data.retCode = 1
           data.msg = '登录成功'
           res.json(data)
@@ -43,10 +43,10 @@ userRouter.post('/login', (req, res) => {
 
 // 注册
 userRouter.post('/register', (req, res) => {
-  let account = req.body.account
+  let username = req.body.username
   let password = req.body.password
-  let sql = "select user_password from user where user_account = ?"
-  db.query(sql, [account], (err, rows) => {
+  let sql = "select userPwd from user where userName = ?"
+  db.query(sql, [username], (err, rows) => {
     if (err) {
       data.retCode = 0
       data.msg = '系统内部错误'
@@ -58,8 +58,8 @@ userRouter.post('/register', (req, res) => {
         data.msg = '用户名已存在'
         res.json(data)
       } else {
-        let sql2 = "insert into user(user_account,user_password) values (?,?)"
-        db.query(sql2, [account, password], (err, rows) => {
+        let sql2 = "insert into user(userName,userPwd) values (?,?)"
+        db.query(sql2, [username, password], (err, rows) => {
           if (err) {
             data.retCode = 0
             data.msg = '系统内部错误'

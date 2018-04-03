@@ -503,6 +503,9 @@ a {
   color: #d3d6db;
 }
 .mu-text-field-input {
+  color: #474a4f;
+}
+.mu-text-field-input.white{
   color: #ffffff;
 }
 .mu-text-field.error .mu-text-field-help {

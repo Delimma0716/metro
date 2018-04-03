@@ -13,6 +13,7 @@ Vue.use(VueRouter)
 const routes = [{
   path: '',
   component: Index,
+  redirect: 'metromap',
   children: [
     {
       path: 'metromap',

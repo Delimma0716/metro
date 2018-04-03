@@ -6,10 +6,12 @@ import router from './router'
 import store from './vuex'
 import MuseUI from 'muse-ui'
 import Less from 'less'
+import axios from 'axios'
 import 'muse-ui/dist/muse-ui.css'
 import '@/assets/css/theme-carbon.css'
 
 Vue.config.productionTip = false
+axios.defaults.baseURL = 'http://localhost:3000'
 
 Vue.use(MuseUI)
 Vue.use(Less)

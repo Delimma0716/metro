@@ -3,7 +3,7 @@
     <!-- 搜索栏 -->
     <mu-appbar>
       <mu-icon-button icon="menu" slot="left" @click="toggle(true)" />
-      <mu-text-field v-if="title === '首页'" class="appbar-search-field" slot="right" hintText="所有站点" @focus="openBottomSheet" v-model="stationName"/>
+      <mu-text-field v-if="title === '首页'" inputClass="white" class="appbar-search-field" slot="right" hintText="所有站点" @focus="openBottomSheet" v-model="stationName"/>
       <mu-flat-button v-if="title === '首页'" icon="search" color="white" label="搜索" slot="right" />
       <span v-if="title !== '首页'" class="title">{{title}}</span>
     </mu-appbar>
@@ -107,7 +107,6 @@ export default {
           ]
           this.stationLine = this.stations[0]
           this.stationName = this.stations[1]
-          console.log(this.stationName)
           this.bottomSheet = true
         })
     },

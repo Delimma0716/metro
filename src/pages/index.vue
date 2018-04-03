@@ -10,7 +10,6 @@ import Header from '@/components/header/header_main'
 import SubHeader from '@/components/header/header_sub'
 export default {
   mounted () {
-    this.$router.push('metromap')
   },
   components: {
     'm-header': Header,

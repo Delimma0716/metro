@@ -13,6 +13,7 @@
       <mu-raised-button label="注册" class="demo-raised-button" @click="reg" />
       <mu-raised-button label="去登录" class="demo-raised-button" primary @click="change" />
     </mu-paper>
+    <!-- 对话框 -->
     <mu-dialog :open="dialog" @close="close">
       <span>{{hintmsg}}</span>
       <mu-flat-button slot="actions" primary @click="close" label="确定" />
@@ -21,6 +22,10 @@
 </template>
 
 <script>
+import axios from 'axios'
+//加密模块
+import crypto from 'crypto'
+
 export default {
   data () {
     return {
@@ -29,7 +34,7 @@ export default {
       pwd2: '',
       dialog: false,
       hintmsg: '',
-      showLog: true
+      showLog: true,
     }
   },
   methods: {
@@ -46,7 +51,25 @@ export default {
         this.hintmsg = '用户名或密码未填写完整'
         this.open()
       } else {
-
+        // 密码md5加密
+        let md5Pwd = crypto.createHash('md5').update(this.pwd).digest('hex')
+        axios
+          .post('/user/login', {
+            username: this.name,
+            password: md5Pwd
+          })
+          .then(response => {
+            if (response.data.retCode === 1) {
+              localStorage.setItem('userName', this.name)
+              this.$router.push('/')
+            } else {
+              this.hintmsg = response.data.msg
+              this.open()
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
     },
     // 注册
@@ -56,22 +79,53 @@ export default {
           this.hintmsg = '两次密码不一致'
           this.open()
         } else {
-
+          // 密码md5加密
+          let md5Pwd = crypto.createHash('md5').update(this.pwd).digest('hex')
+          axios
+            .post('/user/register', {
+              username: this.name,
+              password: md5Pwd
+            })
+            .then(response => {
+              this.hintmsg = response.data.msg
+              this.open()
+              if (response.data.retCode === 1) {
+                localStorage.setItem('userName', this.name)
+                setTimeout(()=>{
+                  this.$router.push('/')
+                },2000)
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
         }
       } else {
         this.hintmsg = '用户名或密码未填写完整'
         this.open()
       }
     },
+    // 登录注册切换
     change () {
       this.clear()
       this.showLog = !this.showLog
     },
+    // 对话框开关
     open () {
       this.dialog = true
     },
     close () {
       this.dialog = false
+    },
+    // 提示框开关
+    showToast () {
+      this.toast = true
+      if (this.toastTimer) {clearTimeout(this.toastTimer)}
+      this.toastTimer = setTimeout(() => { this.toast = false }, 2000)
+    },
+    hideToast () {
+      this.toast = false
+      if (this.toastTimer) {clearTimeout(this.toastTimer)}
     }
   }
 }
