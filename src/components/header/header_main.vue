@@ -3,7 +3,7 @@
     <!-- 搜索栏 -->
     <mu-appbar>
       <mu-icon-button icon="menu" slot="left" @click="toggle(true)" />
-      <mu-text-field v-if="title === '首页'" inputClass="white" class="appbar-search-field" slot="right" hintText="所有站点" @focus="openBottomSheet" v-model="stationName"/>
+      <mu-text-field v-if="title === '首页'" inputClass="white" class="appbar-search-field" slot="right" hintText="所有站点" @focus="openBottomSheet" v-model="stationName" />
       <mu-flat-button v-if="title === '首页'" icon="search" color="white" label="搜索" slot="right" />
       <span v-if="title !== '首页'" class="title">{{title}}</span>
     </mu-appbar>
@@ -34,8 +34,7 @@ export default {
       docked: true,
       paths: this.$router.options.routes[0].children.slice(0, 5),
       hasTitie: false,
-      userName: '',
-      isLog: false,
+      userName: localStorage.getItem('userName') === null ? '登录' : localStorage.getItem('userName'),
 
       // 弹出框数据
       bottomSheet: false,
@@ -48,8 +47,6 @@ export default {
   },
 
   mounted () {
-    // 获取用户名
-    this.userName = '登录'
   },
 
   computed: {
@@ -129,14 +126,14 @@ export default {
           this.stationName = value
           break
       }
-      
+
       this.stations = [this.stationLine, this.stationName]
     },
 
     // 登录
     login () {
       // 已登录则进入用户中心
-      if (this.isLog) {
+      if (this.userName) {
         this.$router.push('user')
       } else {
         this.$router.push('login')
