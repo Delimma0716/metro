@@ -3,7 +3,7 @@
     <mu-list v-if="showList">
       <mu-list-item v-for="lineNo in Object.keys(lineList)" :title="lineNo" toggleNested :open="false">
         <mu-icon slot="left" value="inbox" />
-        <mu-list-item v-for="lineName in lineList[lineNo]" slot="nested" :title="lineName">
+        <mu-list-item v-for="lineName in lineList[lineNo]" slot="nested" :title="lineName" to="stationdetail/123">
           <mu-icon slot="left" value="grade" />
         </mu-list-item>
       </mu-list-item>

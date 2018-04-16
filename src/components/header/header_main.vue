@@ -2,7 +2,8 @@
   <div class="header">
     <!-- 搜索栏 -->
     <mu-appbar>
-      <mu-icon-button icon="menu" slot="left" @click="toggle(true)" />
+      <mu-icon-button v-if="isSub" icon="arrow_back_ios" slot="left" @click="back" />
+      <mu-icon-button v-else icon="menu" slot="left" @click="toggle(true)" />
       <mu-text-field v-if="title === '首页'" inputClass="white" class="appbar-search-field" slot="right" hintText="所有站点" @focus="openBottomSheet" v-model="stationName" />
       <mu-flat-button v-if="title === '首页'" icon="search" color="white" label="搜索" slot="right" />
       <span v-if="title !== '首页'" class="title">{{title}}</span>
@@ -28,10 +29,12 @@ import { mapState, mapGetters } from 'vuex'
 import axios from 'axios'
 
 export default {
+  props: ['isSub'],
   data () {
     return {
       open: false,
       docked: true,
+      isSub: false,
       paths: this.$router.options.routes[0].children.slice(0, 5),
       hasTitie: false,
       userName: localStorage.getItem('userName') === null ? '登录' : localStorage.getItem('userName'),
@@ -66,6 +69,11 @@ export default {
     // 选择页面
     go (path) {
       this.$router.push({ name: path })
+    },
+
+    // 返回上一页面
+    back () {
+      this.$router.go(-1)
     },
 
     // 底部弹出选择线路
