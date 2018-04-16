@@ -1,9 +1,53 @@
 <template>
   <div>
-    站点信息
+    <mu-list v-if="showList">
+      <mu-list-item v-for="lineNo in Object.keys(lineList)" :title="lineNo" toggleNested :open="false">
+        <mu-icon slot="left" value="inbox" />
+        <mu-list-item v-for="lineName in lineList[lineNo]" slot="nested" :title="lineName">
+          <mu-icon slot="left" value="grade" />
+        </mu-list-item>
+      </mu-list-item>
+    </mu-list>
   </div>
 </template>
 
 <script>
-export default {}
+import { mapState, mapGetters } from 'vuex'
+import axios from 'axios'
+
+export default {
+  data () {
+    return {
+      lineList: {},
+      showList: false
+    }
+  },
+  mounted () {
+    this.getAllLines()
+  },
+  methods: {
+    getAllLines () {
+      this.lineList = {}
+      // 获取所有线路
+      axios
+        .post('map/getlines', {
+          code: this.$store.state.currentCityInfo.code,
+          city: this.$store.state.currentCityInfo.city
+        })
+        .then(res => {
+          let linelist = res.data.data.l
+          linelist.forEach(line => {
+            // 渲染数据
+            let linename = (line.ln + ' ' + line.la).trim()
+            this.lineList[linename] = []
+            line.st.forEach(stat => {
+              this.lineList[linename].push(stat.n)
+            })
+          })
+          console.log(this.lineList)
+          this.showList = true
+        })
+    }
+  }
+}
 </script>

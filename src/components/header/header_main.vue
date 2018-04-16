@@ -70,9 +70,10 @@ export default {
 
     // 底部弹出选择线路
     openBottomSheet () {
+      this.lines = {}
       // 获取所有线路
       axios
-        .post('http://127.0.0.1:3000/map/getlines', {
+        .post('map/getlines', {
           code: this.$store.state.currentCityInfo.code,
           city: this.$store.state.currentCityInfo.city
         })

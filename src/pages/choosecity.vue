@@ -22,8 +22,6 @@ export default {
       this.$store.commit('setCurrentCityInfo', this.cityInfo)
       // 返回首页
       this.$router.push('metromap')
-      // 设置标题
-      this.$store.commit('setHeaderTitle', '首页')
     }
   },
   data () {

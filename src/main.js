@@ -15,6 +15,7 @@ axios.defaults.baseURL = 'http://localhost:3000'
 
 Vue.use(MuseUI)
 Vue.use(Less)
+Vue.use(axios)
 
 /* eslint-disable no-new */
 new Vue({

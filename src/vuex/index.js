@@ -14,7 +14,7 @@ const store = new Vuex.Store({
       city: 'shanghai'
     },
     // 标题栏标题
-    headerTitle: '首页',
+    headerTitle: '',
   },
   mutations: {
     // 更改当前城市

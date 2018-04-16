@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Index from '@/pages/index'
 import Choosecity from '@/pages/choosecity'
 import Linelist from '@/pages/linelist'
+import Stationdetail from '@/pages/stationdetail'
 import Metromap from '@/components/map/metromap'
 import Settings from '@/pages/settings'
 import Login from '@/pages/login'
@@ -27,13 +28,13 @@ const routes = [{
     },
     {
       path: 'linelist',
-      name: '站点信息',
-      component: Linelist
+      name: '选择站点',
+      component: Linelist,
     },
     {
       path: 'transfer',
       name: '换乘查询',
-      component: Linelist
+      // component: Linelist
     },
     {
       path: 'settings',
@@ -49,6 +50,11 @@ const routes = [{
       path: 'user',
       name: '个人中心',
       component: User
+    },
+    {
+      path: 'stationdetail/:sId',
+      name: '站点信息',
+      component: Stationdetail
     }
   ]
 }]

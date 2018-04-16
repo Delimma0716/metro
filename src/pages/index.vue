@@ -10,6 +10,7 @@ import Header from '@/components/header/header_main'
 import SubHeader from '@/components/header/header_sub'
 export default {
   mounted () {
+    this.setHeader()
   },
   components: {
     'm-header': Header,
