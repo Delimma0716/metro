@@ -1,6 +1,6 @@
 <template>
     <div class="box">
-        <div class="list">
+        <div class="list" v-if="isLog">
             <mu-list>
                 <mu-divider />
                 <mu-list-item title="个人中心" to="user">
@@ -30,7 +30,18 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      isLog: false
+    }
+  },
+  mounted () {
+    if (localStorage.getItem('userName')) {
+      this.isLog = true
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

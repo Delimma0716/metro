@@ -12,7 +12,7 @@ mapRouter.post('/getlines', (req, res) => {
   // 异步
   new Promise((resolve, reject) => {
     http.get('http://map.amap.com/service/subway?_1469083453978&srhdata=3100_drw_shanghai.json', response => {
-      //获取response的数据 
+      // 获取response的数据
       response.on('data', chunk => {
         obj.data += chunk
       })

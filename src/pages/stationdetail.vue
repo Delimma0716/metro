@@ -1,6 +1,8 @@
 <template>
   <div>
-    详细信息
+    <div class="top">
+      xx站
+    </div>
   </div>
 </template>
 
@@ -10,6 +12,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.top {
+  height: 100px;
+  background: #eeeeee;
+}
 </style>

@@ -9,9 +9,9 @@
       <span v-if="title !== '首页'" class="title">{{title}}</span>
     </mu-appbar>
     <!-- 侧边菜单 -->
-    <mu-drawer :open="open" :docked="docked" @close="toggle()">
+    <mu-drawer :open="open" :docked="docked" @show="getUserName" @close="toggle()">
       <mu-list @itemClick="docked ? '' : toggle()">
-        <mu-list-item :title="userName" @click="login">
+        <mu-list-item :title="userName===null?'登录':userName" @click="login">
           <mu-avatar src="/images/avatar1.jpg" slot="leftAvatar" />
         </mu-list-item>
         <mu-list-item v-for="path in paths" :title="path.name" @click="go(path.name)" />
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import axios from 'axios'
 
 export default {
@@ -34,10 +34,9 @@ export default {
     return {
       open: false,
       docked: true,
-      isSub: false,
       paths: this.$router.options.routes[0].children.slice(0, 5),
       hasTitie: false,
-      userName: localStorage.getItem('userName') === null ? '登录' : localStorage.getItem('userName'),
+      userName: '',
 
       // 弹出框数据
       bottomSheet: false,
@@ -65,7 +64,10 @@ export default {
       this.open = !this.open
       this.docked = !flag
     },
-
+    // 获取用户名
+    getUserName () {
+      this.userName = localStorage.getItem('userName')
+    },
     // 选择页面
     go (path) {
       this.$router.push({ name: path })
@@ -157,6 +159,7 @@ export default {
   margin-bottom: 0;
   width: 80%;
 }
+
 .header {
   color: #fff;
   width: 100%;
@@ -167,7 +170,6 @@ export default {
     text-align: center;
     margin-right: 48px;
   }
-  .user {
-  }
+  .user {}
 }
 </style>
