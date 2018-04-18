@@ -83,7 +83,7 @@ export default {
       this.lines = {}
       // 获取所有线路
       axios
-        .post('map/getstinfo', {
+        .post('map/getlines', {
           code: this.$store.state.currentCityInfo.code,
           city: this.$store.state.currentCityInfo.city
         })
@@ -94,9 +94,10 @@ export default {
             let linename = (line.ln + ' ' + line.la).trim()
             this.lines[linename] = []
             line.st.forEach(stat => {
-              this.lines[linename].push(stat.n)
+              this.lines[linename].push([stat.n, stat.si])
             })
           })
+          console.log(this.lines)
           this.stationSlots = [
             {
               width: '100%',

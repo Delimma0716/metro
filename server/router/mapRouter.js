@@ -83,7 +83,7 @@ mapRouter.post('/getstinfo', (req, res) => {
         })
         response.on('end', () => {
           infoData = JSON.parse(infoData.replace('undefined', ''))
-          resolve(drwData, infoData)
+          resolve(infoData)
         })
       }).on('error', () => {
         obj.retCode = -1
@@ -94,11 +94,40 @@ mapRouter.post('/getstinfo', (req, res) => {
     return p
   }
 
+  /**
+   * 1.根据n-站点名称或si-站点编码从drwData中获取具体站点{}
+   * 2.根据si从infoData中取出{}
+   * 需要的信息:r-所在的全部线路, ls-为起点的线路,n-终点站编码,lt-末班时间,ft-首班时间)
+   * 需要函数:
+   * 1.getStFromDrw(si,drw) return {n-名称,r-路线}
+   * 2.getStFromInfo(si,info) return {d-班车信息}
+   * 3.getData({},{}) return {lines[],[{line,finalst,ft,st}]}
+   * 4.getLineName(si,drw) return string
+   * 5.getStName(si,drw) return string
+   * 需要的参数:
+   * si-站点编码
+   */
+  let analyseData = function () {
+    let p = new Promise((resolve, reject) => {
+
+    })
+    return p
+  }
+
   getDrwData().then(drwData => {
     console.log(drwData)
     return getInfoData()
+  }, obj => {
+    res.send(obj)
   }).then(infoData => {
     console.log(infoData)
+    return getInfoData()
+  }, obj => {
+    res.send(obj)
+  }).then(obj => {
+    res.send(obj)
+  }, obj => {
+    res.send(obj)
   })
 })
 

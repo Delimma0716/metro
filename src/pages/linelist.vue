@@ -41,7 +41,7 @@ export default {
             let linename = (line.ln + ' ' + line.la).trim()
             this.lineList[linename] = []
             line.st.forEach(stat => {
-              this.lineList[linename].push(stat.n)
+              this.lineList[linename].push([stat.n, stat.si])
             })
           })
           console.log(this.lineList)
