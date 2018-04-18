@@ -23,7 +23,7 @@
 
 <script>
 import axios from 'axios'
-//加密模块
+// 加密模块
 import crypto from 'crypto'
 
 export default {
@@ -34,7 +34,7 @@ export default {
       pwd2: '',
       dialog: false,
       hintmsg: '',
-      showLog: true,
+      showLog: true
     }
   },
   methods: {
@@ -91,9 +91,9 @@ export default {
               this.open()
               if (response.data.retCode === 1) {
                 localStorage.setItem('userName', this.name)
-                setTimeout(()=>{
+                setTimeout(() => {
                   this.$router.push('/')
-                },2000)
+                }, 2000)
               }
             })
             .catch(error => {
@@ -120,12 +120,12 @@ export default {
     // 提示框开关
     showToast () {
       this.toast = true
-      if (this.toastTimer) {clearTimeout(this.toastTimer)}
+      if (this.toastTimer) { clearTimeout(this.toastTimer) }
       this.toastTimer = setTimeout(() => { this.toast = false }, 2000)
     },
     hideToast () {
       this.toast = false
-      if (this.toastTimer) {clearTimeout(this.toastTimer)}
+      if (this.toastTimer) { clearTimeout(this.toastTimer) }
     }
   }
 }
@@ -140,6 +140,7 @@ export default {
     padding: 20px;
   }
 }
+
 .alert {
   text-align: center;
 }

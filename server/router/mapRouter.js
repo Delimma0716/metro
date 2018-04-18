@@ -8,10 +8,12 @@ const mapRouter = express.Router()
 // 获取当前城市所有线路以及站点信息
 mapRouter.post('/getlines', (req, res) => {
   // 发送的时候统一 retCode message data
+  let code = req.body.code
+  let city = req.body.city
   let obj = {}
   // 异步
   new Promise((resolve, reject) => {
-    http.get('http://map.amap.com/service/subway?_1469083453978&srhdata=3100_drw_shanghai.json', response => {
+    http.get('http://map.amap.com/service/subway?_1469083453978&srhdata=' + code + '_drw_' + city + '.json', response => {
       // 获取response的数据
       response.on('data', chunk => {
         obj.data += chunk
@@ -28,7 +30,6 @@ mapRouter.post('/getlines', (req, res) => {
       reject(obj)
     })
   }).then(obj => {
-    // console.log('promise:', obj)
     res.send(obj)
   })
 })
