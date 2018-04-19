@@ -2,7 +2,6 @@
  * 普通用户路由
  */
 const express = require('express')
-const http = require('http')
 const userRouter = express.Router()
 
 const db = require('../db')
@@ -14,7 +13,7 @@ userRouter.post('/login', (req, res) => {
   let username = req.body.username
   let password = req.body.password
   // 查询用户表
-  let sql = "select userPwd from user where userName = ?"
+  let sql = 'select userPwd from user where userName = ?'
   db.query(sql, [username], (err, rows) => {
     if (err) {
       data.retCode = 0
@@ -45,7 +44,7 @@ userRouter.post('/login', (req, res) => {
 userRouter.post('/register', (req, res) => {
   let username = req.body.username
   let password = req.body.password
-  let sql = "select userPwd from user where userName = ?"
+  let sql = 'select userPwd from user where userName = ?'
   db.query(sql, [username], (err, rows) => {
     if (err) {
       data.retCode = 0
@@ -58,7 +57,7 @@ userRouter.post('/register', (req, res) => {
         data.msg = '用户名已存在'
         res.json(data)
       } else {
-        let sql2 = "insert into user(userName,userPwd) values (?,?)"
+        let sql2 = 'insert into user(userName,userPwd) values (?,?)'
         db.query(sql2, [username, password], (err, rows) => {
           if (err) {
             data.retCode = 0

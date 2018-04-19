@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data () {
     return {
@@ -28,7 +30,22 @@ export default {
     }
   },
   mounted () {
+    this.getDetail()
+  },
+  methods: {
+    getDetail () {
+      axios
+        .post('map/getstinfo', {
+          code: this.$store.state.currentCityInfo.code,
+          city: this.$store.state.currentCityInfo.city,
+          si: this.stationCode
+        })
+        .then(res => {
+          if (res.data.retCode === 1) {
 
+          }
+        })
+    }
   }
 
 }

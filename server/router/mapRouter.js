@@ -22,7 +22,7 @@ mapRouter.post('/getlines', (req, res) => {
         obj.data += chunk
       })
       response.on('end', () => {
-        obj.retCode = 200
+        obj.retCode = 1
         obj.message = 'success'
         obj.data = JSON.parse(obj.data.replace('undefined', ''))
         resolve(obj)
@@ -99,29 +99,88 @@ mapRouter.post('/getstinfo', (req, res) => {
    * 2.根据si从infoData中取出{}
    * 需要的信息:r-所在的全部线路, ls-为起点的线路,n-终点站编码,lt-末班时间,ft-首班时间)
    * 需要函数:
-   * 1.getStFromDrw(si,drw) return {n-名称,r-路线}
+   * 1.getStFromDrw(si,drw) return [r-路线]
    * 2.getStFromInfo(si,info) return {d-班车信息}
-   * 3.getData({},{}) return {lines[],[{line,finalst,ft,st}]}
-   * 4.getLineName(si,drw) return string
-   * 5.getStName(si,drw) return string
+   * 3.getLineNameByCode(ls,drw) return []
+   * 4.getStNameByCode(si,drw) return []
    * 需要的参数:
    * si-站点编码
    */
   let analyseData = function () {
     let p = new Promise((resolve, reject) => {
-
+      obj.retCode = 1
+      obj.message = '查询成功'
+      obj.data = {
+        lines: getStFromDrw(),
+        schedules: getStFromInfo()
+      }
+      resolve(obj)
     })
     return p
   }
 
+  // 获取站点所在全部路线
+  let getStFromDrw = function () {
+    let lines = []
+    drwData.l.forEach(el => {
+      el.st.forEach(est => {
+        if (est.si === si) {
+          est.r.split('|').forEach(code => {
+            lines.push(getLineNameByCode(code, drwData))
+          })
+        }
+      })
+    })
+    return lines
+  }
+
+  // 获取站点班次信息
+  let getStFromInfo = function () {
+    let schedules = []
+    infoData.l.forEach(el => {
+      el.st.forEach(est => {
+        if (est.si === si) {
+          est.d.forEach(ed => {
+            ed.ls = getLineNameByCode(ed.ls, drwData)
+            ed.n = getStNameByCode(ed.n, drwData)
+          })
+          schedules = est.d
+        }
+      })
+    })
+    return schedules
+  }
+
+  // 根据编码查找路线名称
+  let getLineNameByCode = function (ls, drwData) {
+    let name = ''
+    drwData.l.forEach(el => {
+      if (el.ls === ls) {
+        name = el.ln
+      }
+    })
+    return name
+  }
+
+  // 根据编码查找站点名称
+  let getStNameByCode = function (si, drwData) {
+    let name = ''
+    drwData.l.forEach(el => {
+      el.st.forEach(est => {
+        if (est.si === si) {
+          name = est.n
+        }
+      })
+    })
+    return name
+  }
+
   getDrwData().then(drwData => {
-    console.log(drwData)
     return getInfoData()
   }, obj => {
     res.send(obj)
   }).then(infoData => {
-    console.log(infoData)
-    return getInfoData()
+    return analyseData()
   }, obj => {
     res.send(obj)
   }).then(obj => {
