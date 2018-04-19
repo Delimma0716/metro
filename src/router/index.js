@@ -52,7 +52,7 @@ const routes = [{
       component: User
     },
     {
-      path: 'stationdetail/:sId',
+      path: 'stationdetail/:statCode',
       name: '站点信息',
       component: Stationdetail
     }

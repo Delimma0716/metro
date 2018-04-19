@@ -22,6 +22,14 @@
 
 <script>
 export default {
+  data () {
+    return {
+      stationCode: this.$route.params.statCode
+    }
+  },
+  mounted () {
+
+  }
 
 }
 </script>

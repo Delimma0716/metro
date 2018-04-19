@@ -5,7 +5,7 @@
       <mu-icon-button v-if="isSub" icon="arrow_back_ios" slot="left" @click="back" />
       <mu-icon-button v-else icon="menu" slot="left" @click="toggle(true)" />
       <mu-text-field v-if="title === '首页'" inputClass="white" class="appbar-search-field" slot="right" hintText="所有站点" @focus="openBottomSheet" v-model="stationName" />
-      <mu-flat-button v-if="title === '首页'" icon="search" color="white" label="搜索" slot="right" />
+      <mu-flat-button v-if="title === '首页'" icon="search" color="white" label="搜索" slot="right" :to="'stationdetail/'+stationCode" />
       <span v-if="title !== '首页'" class="title">{{title}}</span>
     </mu-appbar>
     <!-- 侧边菜单 -->
@@ -44,7 +44,10 @@ export default {
       stationSlots: [],
       stations: [],
       stationLine: '',
-      stationName: ''
+      stationName: '',
+      // 对应的站点中文和编码
+      statMapping: {},
+      stationCode: ''
     }
   },
 
@@ -93,11 +96,14 @@ export default {
             // 渲染数据
             let linename = (line.ln + ' ' + line.la).trim()
             this.lines[linename] = []
+            this.statMapping[linename] = []
             line.st.forEach(stat => {
-              this.lines[linename].push([stat.n, stat.si])
+              // 同时需要名称和编码，以冒号分隔
+              this.lines[linename].push(stat.n)
+              this.statMapping[linename].push({ statName: stat.n, statCode: stat.si })
             })
           })
-          console.log(this.lines)
+          console.log(this.statMapping)
           this.stationSlots = [
             {
               width: '100%',
@@ -112,10 +118,11 @@ export default {
           ]
           this.stations = [
             Object.keys(this.lines)[0],
-            this.lines[Object.keys(this.lines)[0]][0]
+            this.lines[Object.keys(this.lines)[0]][0].split(':')[0]
           ]
           this.stationLine = this.stations[0]
           this.stationName = this.stations[1]
+          this.stationCode = this.statMapping[this.stationLine][0].statCode
           this.bottomSheet = true
         })
     },
@@ -130,7 +137,7 @@ export default {
       switch (index) {
         case 0:
           this.stationLine = value
-          const arr = this.lines[value]
+          let arr = this.lines[value]
           this.stationSlots[1].values = arr
           this.stationName = arr[0]
           break
@@ -138,7 +145,12 @@ export default {
           this.stationName = value
           break
       }
-
+      // 拿到对应的code
+      this.statMapping[this.stationLine].forEach(e => {
+        if (e.statName === this.stationName) {
+          this.stationCode = e.statCode
+        }
+      })
       this.stations = [this.stationLine, this.stationName]
     },
 
@@ -171,6 +183,7 @@ export default {
     text-align: center;
     margin-right: 48px;
   }
-  .user {}
+  .user {
+  }
 }
 </style>
