@@ -68,11 +68,11 @@ export default {
 <style lang="less" scoped>
 .detail-box {
   .top {
-    background: #eeeeee;
+    background: #e0e0e0;
     padding: 20px 5%;
     margin-bottom: 20px;
     h3 {
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       span {
         margin-right: 10px;
       }

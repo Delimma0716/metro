@@ -2,7 +2,7 @@
   <div class="header">
     <!-- 搜索栏 -->
     <mu-appbar>
-      <mu-icon-button v-if="isSub" icon="arrow_back_ios" slot="left" @click="back" />
+      <mu-icon-button v-if="isSub" icon="keyboard_arrow_left" slot="left" @click="back" />
       <mu-icon-button v-else icon="menu" slot="left" @click="toggle(true)" />
       <mu-text-field v-if="title === '首页'" inputClass="white" class="appbar-search-field" slot="right" hintText="所有站点" @focus="openBottomSheet" v-model="stationName" />
       <mu-flat-button v-if="title === '首页'" icon="search" color="white" label="搜索" slot="right" :to="'stationdetail/'+stationCode" />

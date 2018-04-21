@@ -2,7 +2,7 @@
   <div class="clist">
     <mu-list @itemClick="choose">
       <mu-list-item v-for="city in cities" :title="city[1].name" :value="city[0]" :describeText="city[1].city" class="clist-item">
-        <mu-icon v-if="city[0]===$store.state.currentCityInfo.code" slot="right" value="info" />
+        <mu-icon v-if="city[0]===$store.state.currentCityInfo.code" slot="right" value="done" />
       </mu-list-item>
     </mu-list>
   </div>
@@ -11,10 +11,10 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 export default {
-  mounted () { },
+  mounted() { },
   methods: {
     // 更改当前城市
-    choose (item) {
+    choose(item) {
       this.cityInfo.code = item.$options.propsData.value
       this.cityInfo.name = item.$options.propsData.title
       this.cityInfo.city = item.$options.propsData.describeText
@@ -24,7 +24,7 @@ export default {
       this.$router.push('metromap')
     }
   },
-  data () {
+  data() {
     return {
       cityInfo: {
         code: '',
@@ -46,7 +46,6 @@ export default {
   top: 56px;
   padding: 0 10px;
   width: 100%;
-
   .clist-item {
     border-bottom: 1px solid #eeeeee;
   }

@@ -46,7 +46,7 @@ const routes = [{
     component: Login
   },
   {
-    path: 'user',
+    path: 'settings/user',
     name: '个人中心',
     component: User
   },
