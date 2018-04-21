@@ -22,7 +22,7 @@
 import axios from 'axios'
 
 export default {
-  data () {
+  data() {
     return {
       stationCode: this.$route.params.statCode,
       stationName: this.$route.params.statName,
@@ -30,11 +30,11 @@ export default {
       schedules: []
     }
   },
-  mounted () {
+  mounted() {
     this.getDetail()
   },
   methods: {
-    getDetail () {
+    getDetail() {
       axios
         .post('map/getstinfo', {
           code: this.$store.state.currentCityInfo.code,
@@ -53,7 +53,7 @@ export default {
             // 若没有时刻则不显示
             this.schedules = []
             for (let schedule of res.data.data.schedules) {
-              if (schedule.lt !== '--:--' && schedule.ft !== '--:--') {
+              if (schedule.lt !== '--:--' && schedule.ft !== '--:--' && schedule.ls !== '' && schedule.n !== '') {
                 this.schedules.push(schedule)
               }
             }
