@@ -12,7 +12,7 @@
     <mu-drawer :open="open" :docked="docked" @show="getUserName" @close="toggle()">
       <mu-list @itemClick="docked ? '' : toggle()">
         <mu-list-item :title="userName===null?'登录':userName" @click="login">
-          <mu-avatar src="/images/avatar1.jpg" slot="leftAvatar" />
+          <mu-avatar src="@/assets/images/logo.jpg" slot="leftAvatar" />
         </mu-list-item>
         <mu-list-item v-for="path in paths" :title="path.name" @click="go(path.name)" />
       </mu-list>
@@ -158,7 +158,7 @@ export default {
     login () {
       // 已登录则进入用户中心
       if (this.userName) {
-        this.$router.push('user')
+        this.$router.push('settings/user')
       } else {
         this.$router.push('login')
       }

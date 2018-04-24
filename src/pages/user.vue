@@ -1,11 +1,17 @@
 <template>
-    <div>
-        <mu-raised-button label="退出" fullWidth default @click="logout" />
-    </div>
+  <div>
+    <h1>{{userName}}</h1>
+    <mu-raised-button label="退出" fullWidth secondary @click="logout" />
+  </div>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      userName: localStorage.getItem('userName')
+    }
+  },
   mounted () {
   },
   methods: {
@@ -18,3 +24,10 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+h1{
+  text-align: center;
+  margin-bottom: 500px;
+}
+</style>
