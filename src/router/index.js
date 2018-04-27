@@ -15,47 +15,46 @@ const routes = [{
   path: '',
   component: Index,
   redirect: 'metromap',
-  children: [
-    {
-      path: 'metromap',
-      name: '首页',
-      component: Metromap
-    },
-    {
-      path: 'choosecity',
-      name: '选择城市',
-      component: Choosecity
-    },
-    {
-      path: 'linelist',
-      name: '选择站点',
-      component: Linelist,
-    },
-    {
-      path: 'transfer',
-      name: '换乘查询',
-      // component: Linelist
-    },
-    {
-      path: 'settings',
-      name: '设置',
-      component: Settings
-    },
-    {
-      path: 'login',
-      name: '登录',
-      component: Login
-    },
-    {
-      path: 'user',
-      name: '个人中心',
-      component: User
-    },
-    {
-      path: 'stationdetail/:statCode',
-      name: '站点信息',
-      component: Stationdetail
-    }
+  children: [{
+    path: 'metromap',
+    name: '首页',
+    component: Metromap
+  },
+  {
+    path: 'choosecity',
+    name: '选择城市',
+    component: Choosecity
+  },
+  {
+    path: 'linelist',
+    name: '选择站点',
+    component: Linelist
+  },
+  {
+    path: 'transfer',
+    name: '换乘查询'
+    // component: Linelist
+  },
+  {
+    path: 'settings',
+    name: '设置',
+    component: Settings
+  },
+  {
+    path: 'login',
+    name: '登录',
+    component: Login
+  },
+  {
+    path: 'settings/user',
+    name: '个人中心',
+    component: User
+  },
+  {
+    path: 'stationdetail/:statCode/:statName',
+    name: '站点信息',
+    component: Stationdetail
+  }
   ]
 }]
 

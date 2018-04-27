@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mu-raised-button label="退出" fullWidth primary @click="logout" />
+        <mu-raised-button label="退出" fullWidth default @click="logout" />
     </div>
 </template>
 

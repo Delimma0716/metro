@@ -3,7 +3,7 @@
         <div class="list" v-if="isLog">
             <mu-list>
                 <mu-divider />
-                <mu-list-item title="个人中心" to="user">
+                <mu-list-item title="个人中心" to="settings/user">
                     <mu-icon slot="right" value="keyboard_arrow_right" />
                 </mu-list-item>
                 <mu-divider />
