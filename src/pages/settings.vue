@@ -26,21 +26,40 @@
                 <mu-divider />
             </mu-list>
         </div>
+        <button @click="getLocation">获取地理位置</button>
     </div>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-      isLog: false
+    data () {
+        return {
+            isLog: false
+        }
+    },
+    mounted () {
+        if (localStorage.getItem('userName')) {
+            this.isLog = true
+        }
+    },
+    methods: {
+        getLocation () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(this.showPosition,this.showError)
+            }
+            else {
+                alert("Geolocation is not supported by this browser.")
+            }
+        },
+        showPosition (position) {
+            console.log(23333)
+            console.log('Latitude: ' + position.coords.latitude,
+                'Longitude: ' + position.coords.longitude)
+        },
+        showError (error) {
+            console.log(error)
+        }
     }
-  },
-  mounted () {
-    if (localStorage.getItem('userName')) {
-      this.isLog = true
-    }
-  }
 }
 </script>
 

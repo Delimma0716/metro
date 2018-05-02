@@ -14,7 +14,11 @@ const store = new Vuex.Store({
       city: 'shanghai'
     },
     // 标题栏标题
-    headerTitle: ''
+    headerTitle: '',
+    // 路径规划起点
+    startCode: '',
+    // 终点
+    endCode: ''
   },
   mutations: {
     // 更改当前城市
@@ -28,6 +32,14 @@ const store = new Vuex.Store({
     // 更改标题
     setHeaderTitle (state, headerTitle) {
       state.headerTitle = headerTitle
+    },
+    // 设置起点
+    setStartCode (state, startCode) {
+      state.startCode = startCode
+    },
+    // 设置终点
+    setEndCode (state, endCode) {
+      state.endCode = endCode
     }
   },
   getters: {

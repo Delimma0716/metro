@@ -8,22 +8,18 @@
 <script>
 import Loading from '@/components/tools/loading'
 export default {
-  data() {
+  data () {
     return {
       map: '',
       lines: [],
       showLoading: true
     }
   },
-  mounted() {
-    // 预留0.5s加载数据
-    setTimeout(() => {
-      this.showLoading = false
-      this.init()
-    }, 500)
+  mounted () {
+    this.init()
   },
   methods: {
-    init() {
+    init () {
       this.map = subway('mainmap', {
         // 上海的adcode
         adcode: this.$store.state.currentCityInfo.code,
@@ -35,9 +31,20 @@ export default {
       document.getElementById('drag_handle').style.position = 'relative'
       // 地图加载完之后才能获取到subway
       this.map.event.on('subway.complete', () => {
+        // 加载完毕
+        this.showLoading = false
         // 设置当前城市地图
         this.$store.commit('setCurrentCityMap', this.map)
+        this.route()
       })
+    },
+    // 路径规划
+    route () {
+      if (this.$store.state.startCode !== '' && this.$store.state.endCode !== '') {
+        this.map.route(this.$store.state.startCode, this.$store.state.endCode)
+        this.$store.commit('setStartCode', '')
+        this.$store.commit('setEndCode', '')
+      }
     }
   },
   components: {

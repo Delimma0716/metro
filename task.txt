@@ -6,7 +6,6 @@ main function：
 
 sub function：
 1.上传头像
-2.地图加载完毕关闭loading
 3.服务器返回-1时弹出错误提示框
 
 细节修改：
