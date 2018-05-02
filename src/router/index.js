@@ -4,6 +4,7 @@ import Index from '@/pages/index'
 import Choosecity from '@/pages/choosecity'
 import Linelist from '@/pages/linelist'
 import Stationdetail from '@/pages/stationdetail'
+import Transfer from '@/pages/transfer'
 import Metromap from '@/components/map/metromap'
 import Settings from '@/pages/settings'
 import Login from '@/pages/login'
@@ -32,8 +33,8 @@ const routes = [{
   },
   {
     path: 'transfer',
-    name: '换乘查询'
-    // component: Linelist
+    name: '换乘查询',
+    component: Transfer
   },
   {
     path: 'settings',
