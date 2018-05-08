@@ -1,43 +1,28 @@
 <template>
-  <div class="header">
-    <!-- 搜索栏 -->
-    <mu-appbar>
-      <mu-icon-button v-if="isSub" icon="keyboard_arrow_left" slot="left" @click="back" />
-      <mu-icon-button v-else icon="menu" slot="left" @click="toggle(true)" />
-      <mu-text-field v-if="title === '首页'" inputClass="white" class="appbar-search-field" slot="right" hintText="所有站点" @focus="openBottomSheet" v-model="stationName" />
-      <mu-flat-button v-if="title === '首页'" icon="search" color="white" label="搜索" slot="right" :to="'stationdetail/'+stationCode+'/'+stationName" />
-      <span v-if="title !== '首页'" class="title">{{title}}</span>
-    </mu-appbar>
-    <!-- 侧边菜单 -->
-    <mu-drawer :open="open" :docked="docked" @show="getUserName" @close="toggle()">
-      <mu-list @itemClick="docked ? '' : toggle()">
-        <mu-list-item :title="userName===null?'登录':userName" @click="login">
-          <mu-avatar src="@/assets/images/logo.jpg" slot="leftAvatar" />
-        </mu-list-item>
-        <mu-list-item v-for="path in paths" :title="path.name" @click="go(path.name)" />
-      </mu-list>
-    </mu-drawer>
+  <div　class="transfer-box">
+    <mu-text-field hintText="选择起点" fullWidth @focus="openBottomSheet(1)" v-model="startName" />
+    <mu-icon class="icon" value="swap_vert" :size="36" />
+    <mu-text-field hintText="选择终点" fullWidth @focus="openBottomSheet(2)" v-model="endName" />
     <!-- 选择站点 -->
     <mu-bottom-sheet :open="bottomSheet" @close="closeBottomSheet">
       <mu-picker :slots="stationSlots" :visible-item-count="5" @change="stationChange" :values="stations" />
     </mu-bottom-sheet>
-  </div>
+
+    <mu-raised-button label="确定" class="button-confirm" primary fullWidth @click="confirm" />
+    </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import axios from 'axios'
 
 export default {
-  props: ['isSub'],
   data () {
     return {
-      open: false,
-      docked: true,
-      paths: this.$router.options.routes[0].children.slice(0, 6),
-      hasTitie: false,
-      userName: '',
-
+      startName: '',
+      endName: '',
+      startCode: '',
+      endCode: '',
+      tag: '',
       // 弹出框数据
       bottomSheet: false,
       lines: {},
@@ -50,39 +35,10 @@ export default {
       stationCode: ''
     }
   },
-
-  mounted () {
-  },
-
-  computed: {
-    ...mapState({
-      // 标题
-      title: 'headerTitle'
-    })
-  },
-
   methods: {
-    // 打开侧边菜单
-    toggle (flag) {
-      this.open = !this.open
-      this.docked = !flag
-    },
-    // 获取用户名
-    getUserName () {
-      this.userName = localStorage.getItem('userName')
-    },
-    // 选择页面
-    go (path) {
-      this.$router.push({ name: path })
-    },
-
-    // 返回上一页面
-    back () {
-      this.$router.go(-1)
-    },
-
     // 底部弹出选择线路
-    openBottomSheet () {
+    openBottomSheet (tag) {
+      this.tag = tag
       this.lines = {}
       // 获取所有线路
       axios
@@ -103,7 +59,6 @@ export default {
               this.statMapping[linename].push({ statName: stat.n, statCode: stat.si })
             })
           })
-          // console.log(this.statMapping)
           this.stationSlots = [
             {
               width: '100%',
@@ -124,6 +79,14 @@ export default {
           this.stationName = this.stations[1]
           this.stationCode = this.statMapping[this.stationLine][0].statCode
           this.bottomSheet = true
+          if (tag === 1) {
+            this.startName = this.stationName
+            this.$store.commit('setStartCode', this.stationName)
+          } else {
+            this.endName = this.stationName
+            this.$store.commit('setEndCode', this.stationName)
+          }
+
         })
     },
 
@@ -152,38 +115,34 @@ export default {
         }
       })
       this.stations = [this.stationLine, this.stationName]
-    },
-
-    // 登录
-    login () {
-      // 已登录则进入用户中心
-      if (this.userName) {
-        this.$router.push('settings/user')
+      if (this.tag === 1) {
+        this.startName = this.stationName
+        this.$store.commit('setStartCode', this.stationName)
       } else {
-        this.$router.push('login')
+        this.endName = this.stationName
+        this.$store.commit('setEndCode', this.stationName)
+      }
+    },
+    // 确定规划路线
+    confirm () {
+      if (this.$store.state.startCode !== '' && this.$store.state.endCode !== '') {
+        this.$router.push('/metromap')
       }
     }
   }
+
 }
 </script>
 
 <style lang="less" scoped>
-.appbar-search-field {
-  margin-bottom: 0;
-  width: 80%;
-}
-
-.header {
-  color: #fff;
-  width: 100%;
-  .title {
-    color: #fff;
-    font-size: 18px;
+.transfer-box {
+  padding: 36px 5%;
+  .icon {
+    margin: 0 auto;
     display: block;
-    text-align: center;
-    margin-right: 48px;
   }
-  .user {
+  .button-confirm {
+    margin-top: 20px;
   }
 }
 </style>

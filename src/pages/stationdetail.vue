@@ -6,8 +6,8 @@
         <span v-for="line in lines">{{line}}</span>
       </h3>
       <mu-raised-button label="线路图" class="set-button" secondary/>
-      <mu-raised-button label="设为终点" class="set-button" primary/>
-      <mu-raised-button label="设为起点" class="set-button" />
+      <mu-raised-button label="设为终点" class="set-button" primary @click="setEnd" />
+      <mu-raised-button label="设为起点" class="set-button" @click="setStart" />
     </div>
     <div class="middle">
       <div class="middle-block" v-for="schedule in schedules">
@@ -19,10 +19,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from 'axios'
 
 export default {
-  data() {
+  data () {
     return {
       stationCode: this.$route.params.statCode,
       stationName: this.$route.params.statName,
@@ -30,11 +31,17 @@ export default {
       schedules: []
     }
   },
-  mounted() {
+  mounted () {
     this.getDetail()
   },
+  computed: {
+    ...mapState({
+      // 地图实例
+      map: 'currentCityMap'
+    })
+  },
   methods: {
-    getDetail() {
+    getDetail () {
       axios
         .post('map/getstinfo', {
           code: this.$store.state.currentCityInfo.code,
@@ -59,6 +66,22 @@ export default {
             }
           }
         })
+    },
+    // 设置起点
+    setStart () {
+      this.$store.commit('setStartCode', this.stationCode)
+      this.checkRoute()
+    },
+    // 设置终点
+    setEnd () {
+      this.$store.commit('setEndCode', this.stationCode)
+      this.checkRoute()
+    },
+    // 检查起点终点
+    checkRoute () {
+      if (this.$store.state.startCode !== '' && this.$store.state.endCode !== '') {
+        this.$router.push('/metromap')
+      }
     }
   }
 

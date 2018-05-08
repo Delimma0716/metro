@@ -1,7 +1,15 @@
 <template>
-  <div>
-    <h1>{{userName}}</h1>
-    <mu-raised-button label="退出" fullWidth secondary @click="logout" />
+  <div class="box">
+    <div class="list">
+      <mu-list>
+        <mu-divider />
+        <mu-list-item title="常用地址">
+          <mu-icon slot="right" value="keyboard_arrow_right" />
+        </mu-list-item>
+        <mu-divider />
+      </mu-list>
+    </div>
+    <mu-raised-button label="退出" fullWidth primary @click="logout" />
   </div>
 </template>
 
@@ -26,8 +34,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-h1{
-  text-align: center;
-  margin-bottom: 500px;
+.box {
+  .list {
+    margin: 30px 0;
+  }
 }
 </style>
