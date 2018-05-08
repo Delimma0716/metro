@@ -76,4 +76,44 @@ userRouter.post('/register', (req, res) => {
   })
 })
 
+// 添加提醒
+userRouter.post('/addalarm', (req, res) => {
+  let username = req.body.username
+  let type = req.body.type
+  let value = req.body.value
+  let sql = 'insert into alarm(userName,alType,alValue) values (?,?,?)'
+  db.query(sql, [username, type, value], (err, rows) => {
+    if (err) {
+      data.retCode = 0
+      data.msg = '系统内部错误'
+      res.json(data)
+      console.log('error:', err)
+    } else {
+      let data = {}
+      data.retCode = 1
+      data.msg = '添加成功'
+      res.json(data)
+    }
+  })
+})
+
+// 获取用户所有提醒
+userRouter.post('/getalarms', (req, res) => {
+  let username = req.body.username
+  // 查询用户表
+  let sql = 'select * from alarm where userName = ?'
+  db.query(sql, [username], (err, rows) => {
+    if (err) {
+      data.retCode = 0
+      data.msg = '系统内部错误'
+      res.json(data)
+      console.log('error:', err)
+    } else {
+      data.retCode = 1
+      data.msg = rows
+      res.json(data)
+    }
+  })
+})
+
 module.exports = userRouter

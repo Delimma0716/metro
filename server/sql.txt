@@ -1,0 +1,7 @@
+CREATE TABLE `metro`.`alarm` (
+  `alId` INT NOT NULL AUTO_INCREMENT,
+  `alValue` VARCHAR(45) NOT NULL,
+  `alType` VARCHAR(45) NOT NULL,
+  `userName` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`alId`))
+DEFAULT CHARACTER SET = utf8;

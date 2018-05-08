@@ -3,39 +3,36 @@
     <div class="action">
       <mu-raised-button icon="add" mini class="demo-float-button" label="添加提醒" @click="open" />
     </div>
+    <!-- 提醒列表 -->
     <mu-list class="list">
-      <mu-divider />
-      <mu-list-item disableRipple @click="handleToggle('events')" title="事件和提醒">
-        <mu-switch v-model="events" slot="right" />
-      </mu-list-item>
-      <mu-divider />
-      <mu-list-item disableRipple @click="handleToggle('calls')" title="电话">
-        <mu-switch v-model="calls" slot="right" />
-      </mu-list-item>
-      <mu-divider />
-      <mu-list-item disableRipple @click="handleToggle('messages')" title="信息">
-        <mu-switch v-model="messages" slot="right" />
-      </mu-list-item>
-      <mu-divider />
+      <mu-divider v-if="alarms.length>0" />
+      <div v-for="(alarm,index) in alarms">
+        <mu-list-item disableRipple @click="handleToggle('events')" :title="alarm.alValue">
+          <mu-switch :v-model="alarm" slot="right" :value="start[index]" @change="startAlarm(index,alarm)" />
+        </mu-list-item>
+        <mu-divider />
+      </div>
     </mu-list>
-
+    <!-- 添加提醒 -->
     <div class="addBox" id="add">
       <mu-appbar>
         <mu-flat-button slot="left" label="取消" color="white" @click="close" />
         <div style="text-align:center;font-size:18px;">添加提醒</div>
-        <mu-flat-button slot="right" label="确定" color="white" />
+        <mu-flat-button slot="right" label="确定" color="white" @click="addAlarm" />
       </mu-appbar>
       <mu-content-block>
         <div class="radioBox">
-          <mu-radio label="按站点" name="group" v-model="radioValue[0]" uncheckIcon="radio_button_unchecked" checkedIcon="radio_button_checked" /> <br/>
+          <mu-radio label="按站点" name="group" :nativeValue="radioValue[0]" v-model="type" uncheckIcon="radio_button_unchecked" checkedIcon="radio_button_checked" /> <br/>
           <mu-picker :slots="stationSlots" :visible-item-count="5" @change="stationChange" :values="stations" />
         </div>
         <div class="radioBox">
-          <mu-radio label="按时间" name="group" v-model="radioValue[1]" class="demo-radio" uncheckIcon="radio_button_unchecked" checkedIcon="radio_button_checked" /> <br/>
+          <mu-radio label="按时间" name="group" :nativeValue="radioValue[1]" v-model="type" class="demo-radio" uncheckIcon="radio_button_unchecked" checkedIcon="radio_button_checked" /> <br/>
           <mu-time-picker hintText="选择时间" v-model="time" /><br/>
         </div>
       </mu-content-block>
     </div>
+
+    <mu-snackbar v-if="snackbar" :message="msg" />
   </div>
 </template>
 
@@ -46,26 +43,48 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      popup: false,
+      alarms: [],
       radioValue: ['stat', 'time'],
+      type: 'stat',
       time: '',
       lines: {},
       stationSlots: [],
       stations: [],
       stationLine: '',
       stationName: '',
+      msg: '',
+      snackbar: false,
+      start: []
     }
   },
   mounted () {
+    this.getAlarms()
   },
   methods: {
+    // 获取改用户所有提醒
+    getAlarms () {
+      axios.post('user/getalarms', {
+        username: localStorage.getItem('userName')
+      }).then(res => {
+        if (res.data.retCode === 1) {
+          this.alarms = res.data.msg.reverse()
+          this.start = new Array(this.alarms.length).fill(false)
+        } else {
+          this.snackbar = true
+          this.msg = res.data.msg
+          setTimeout(() => {
+            this.snackbar = false
+          }, 2000)
+        }
+      })
+    },
     open () {
       this.getLines()
     },
     close () {
       document.getElementById('add').style.display = 'none'
     },
-    // 站点名称
+    // 获取站点名称
     getLines () {
       this.lines = {}
       // 获取所有线路
@@ -105,7 +124,6 @@ export default {
           document.getElementById('add').style.display = 'block'
         })
     },
-
     // 选择站点
     stationChange (value, index) {
       switch (index) {
@@ -121,6 +139,33 @@ export default {
       }
       this.stations = [this.stationLine, this.stationName]
     },
+    // 添加提醒
+    addAlarm () {
+      let v = this.type === 'stat' ? this.stationName : this.time
+      axios.post('user/addalarm', {
+        username: localStorage.getItem('userName'),
+        type: this.type,
+        value: v
+      }).then(res => {
+        if (res.data.retCode === 1) {
+          this.close()
+          this.getAlarms()
+        } else {
+          this.snackbar = true
+          this.msg = res.data.msg
+          setTimeout(() => {
+            this.snackbar = false
+          }, 2000)
+        }
+      })
+    },
+    // 启动提醒
+    startAlarm (index, alarm) {
+      this.start[index] = !this.start[index]
+      if (this.start[index]) {
+        // 提醒
+      }
+    }
   }
 
 }
@@ -144,7 +189,7 @@ export default {
     left: 0;
     background: #ffffff;
     z-index: 2018;
-    .radioBox{
+    .radioBox {
       margin: 30px 0;
     }
   }
