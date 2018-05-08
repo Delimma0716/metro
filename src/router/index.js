@@ -5,6 +5,7 @@ import Choosecity from '@/pages/choosecity'
 import Linelist from '@/pages/linelist'
 import Stationdetail from '@/pages/stationdetail'
 import Transfer from '@/pages/transfer'
+import Alarm from '@/pages/alarm'
 import Metromap from '@/components/map/metromap'
 import Settings from '@/pages/settings'
 import Login from '@/pages/login'
@@ -28,13 +29,18 @@ const routes = [{
   },
   {
     path: 'linelist',
-    name: '选择站点',
+    name: '站点信息',
     component: Linelist
   },
   {
     path: 'transfer',
     name: '换乘查询',
     component: Transfer
+  },
+  {
+    path: 'alarm',
+    name: '到站提醒',
+    component: Alarm
   },
   {
     path: 'settings',

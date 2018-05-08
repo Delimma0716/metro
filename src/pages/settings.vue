@@ -45,7 +45,7 @@ export default {
     methods: {
         getLocation () {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(this.showPosition,this.showError)
+                navigator.geolocation.getCurrentPosition(this.showPosition, this.showError)
             }
             else {
                 alert("Geolocation is not supported by this browser.")

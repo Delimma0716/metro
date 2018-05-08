@@ -34,7 +34,7 @@ export default {
     return {
       open: false,
       docked: true,
-      paths: this.$router.options.routes[0].children.slice(0, 5),
+      paths: this.$router.options.routes[0].children.slice(0, 6),
       hasTitie: false,
       userName: '',
 
@@ -103,7 +103,7 @@ export default {
               this.statMapping[linename].push({ statName: stat.n, statCode: stat.si })
             })
           })
-          console.log(this.statMapping)
+          // console.log(this.statMapping)
           this.stationSlots = [
             {
               width: '100%',
@@ -158,7 +158,7 @@ export default {
     login () {
       // 已登录则进入用户中心
       if (this.userName) {
-        this.$router.push('user')
+        this.$router.push('settings/user')
       } else {
         this.$router.push('login')
       }
