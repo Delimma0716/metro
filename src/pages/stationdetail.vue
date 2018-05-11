@@ -5,9 +5,11 @@
       <h3>
         <span v-for="line in lines">{{line}}</span>
       </h3>
-      <mu-raised-button label="到这里去" class="set-button" secondary/>
-      <mu-raised-button label="设为终点" class="set-button" primary @click="setEnd" />
-      <mu-raised-button label="设为起点" class="set-button" @click="setStart" />
+      <div v-if="map!==''">
+        <mu-raised-button label="到这里去" class="set-button" secondary @click="navigate" />
+        <mu-raised-button label="设为终点" class="set-button" primary @click="setEnd" />
+        <mu-raised-button label="设为起点" class="set-button" @click="setStart" />
+      </div>
     </div>
     <div class="middle">
       <div class="middle-block" v-for="schedule in schedules">
@@ -32,17 +34,19 @@ export default {
       stationName: this.$route.params.statName,
       position: [],
       lines: [],
-      schedules: []
+      schedules: [],
+      // 地图实例
+      map: '',
+      // 导航插件
+      transfer: [],
+      walking: [],
+      driving: [],
+      currentPosition: []
     }
   },
   mounted () {
     this.getDetail()
-  },
-  computed: {
-    ...mapState({
-      // 地图实例
-      map: 'currentCityMap'
-    })
+    this.getCurrentPoi()
   },
   methods: {
     getDetail () {
@@ -92,19 +96,41 @@ export default {
     },
     // 显示周边地图
     showMap () {
-      var map = new AMap.Map('submap', {
+      this.map = new AMap.Map('submap', {
         resizeEnable: true,
         zoom: 16,
         center: this.position
       })
       // 定位工具
-      AMap.plugin(['AMap.Geolocation'],
-        function () {
-          map.addControl(new AMap.Geolocation())
+      AMap.plugin('AMap.Geolocation', () => {
+        let geolocation = new AMap.Geolocation()
+        this.map.addControl(geolocation)
+        geolocation.getCurrentPosition()
+        AMap.event.addListener(geolocation, 'complete', (result) => {
+          console.log('----', result)
         })
+        AMap.event.addListener(geolocation, 'error', (error) => {
+          console.log('----', error)
+        })
+      })
+    },
+    // 导航
+    navigate () {
+      let transOptions = {
+        map: this.map,
+        panel: 'submap'
+      }
+      // 导航插件 步行
+      AMap.service(['AMap.Walking'], () => {
+        this.walking = new AMap.Walking(transOptions)
+        this.walking.search(this.currentPosition, this.position)
+      })
+    },
+    // 获取当前位置
+    getCurrentPoi () {
+      this.currentPosition = [122.488, 31.3813]
     }
   }
-
 }
 </script>
 
@@ -112,7 +138,7 @@ export default {
 .detail-box {
   .top {
     background: #e0e0e0;
-    padding: 20px 5%;
+    padding: 10px 20px 5%;
     margin-bottom: 20px;
     h3 {
       margin-bottom: 20px;
@@ -135,7 +161,7 @@ export default {
     }
   }
   .bottom {
-    padding: 20px 5%;
+    padding: 0 20px 5%;
     #submap {
       width: 100%;
       height: 300px;

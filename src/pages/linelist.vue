@@ -42,7 +42,7 @@ export default {
               this.lineList[linename].push([stat.n, stat.si])
             })
           })
-          console.log(this.lineList)
+          // console.log(this.lineList)
           this.showList = true
         })
     }
