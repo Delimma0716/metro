@@ -5,7 +5,7 @@
       <h3>
         <span v-for="line in lines">{{line}}</span>
       </h3>
-      <mu-raised-button label="线路图" class="set-button" secondary/>
+      <mu-raised-button label="到这里去" class="set-button" secondary/>
       <mu-raised-button label="设为终点" class="set-button" primary @click="setEnd" />
       <mu-raised-button label="设为起点" class="set-button" @click="setStart" />
     </div>
@@ -14,6 +14,9 @@
         <span>{{schedule.ls}} {{schedule.n}}方向</span>
         <span class="time">{{schedule.ft}} / {{schedule.lt}}</span>
       </div>
+    </div>
+    <div class="bottom">
+      <div id="submap"></div>
     </div>
   </div>
 </template>
@@ -27,6 +30,7 @@ export default {
     return {
       stationCode: this.$route.params.statCode,
       stationName: this.$route.params.statName,
+      position: [],
       lines: [],
       schedules: []
     }
@@ -64,6 +68,9 @@ export default {
                 this.schedules.push(schedule)
               }
             }
+            this.position = res.data.data.position
+            // 显示小地图
+            this.showMap()
           }
         })
     },
@@ -82,6 +89,19 @@ export default {
       if (this.$store.state.startCode !== '' && this.$store.state.endCode !== '') {
         this.$router.push('/metromap')
       }
+    },
+    // 显示周边地图
+    showMap () {
+      var map = new AMap.Map('submap', {
+        resizeEnable: true,
+        zoom: 16,
+        center: this.position
+      })
+      // 定位工具
+      AMap.plugin(['AMap.Geolocation'],
+        function () {
+          map.addControl(new AMap.Geolocation())
+        })
     }
   }
 
@@ -112,6 +132,13 @@ export default {
       .time {
         float: right;
       }
+    }
+  }
+  .bottom {
+    padding: 20px 5%;
+    #submap {
+      width: 100%;
+      height: 300px;
     }
   }
 }

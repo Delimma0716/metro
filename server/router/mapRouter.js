@@ -103,6 +103,7 @@ mapRouter.post('/getstinfo', (req, res) => {
    * 2.getStFromInfo(si,info) return {d-班车信息}
    * 3.getLineNameByCode(ls,drw) return []
    * 4.getStNameByCode(si,drw) return []
+   * 5.getStPoiByCode(si,drw) return [坐标]
    * 需要的参数:
    * si-站点编码
    */
@@ -111,8 +112,9 @@ mapRouter.post('/getstinfo', (req, res) => {
       obj.retCode = 1
       obj.message = '查询成功'
       obj.data = {
-        lines: getStFromDrw(),
-        schedules: getStFromInfo()
+        position: getStPoiByCode(),//坐标
+        lines: getStFromDrw(),//所在路线
+        schedules: getStFromInfo()//首末班车
       }
       resolve(obj)
     })
@@ -173,6 +175,22 @@ mapRouter.post('/getstinfo', (req, res) => {
       })
     })
     return name
+  }
+
+  // 根据编码查找站点坐标
+  let getStPoiByCode = function () {
+    let position = []
+    drwData.l.forEach(el => {
+      el.st.forEach(est => {
+        if (est.si === si) {
+          position = est.sl.split(',')
+          // 转数字
+          position[0] = parseFloat(position[0])
+          position[1] = parseFloat(position[1])
+        }
+      })
+    })
+    return position
   }
 
   getDrwData().then(drwData => {
