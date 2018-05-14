@@ -1,5 +1,5 @@
 <template>
-  <div　class="transfer-box">
+  <div class="transfer-box">
     <mu-text-field hintText="选择起点" fullWidth @focus="openBottomSheet(1)" v-model="startName" />
     <mu-icon class="icon" value="swap_vert" :size="36" />
     <mu-text-field hintText="选择终点" fullWidth @focus="openBottomSheet(2)" v-model="endName" />
@@ -86,7 +86,6 @@ export default {
             this.endName = this.stationName
             this.$store.commit('setEndCode', this.stationName)
           }
-
         })
     },
 

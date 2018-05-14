@@ -5,3 +5,8 @@ CREATE TABLE `metro`.`alarm` (
   `userName` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`alId`))
 DEFAULT CHARACTER SET = utf8;
+
+ALTER TABLE `metro`.`user` 
+ADD COLUMN `userHome` VARCHAR(45) NULL AFTER `userPwd`,
+ADD COLUMN `userCompany` VARCHAR(45) NULL AFTER `userHome`,
+ADD COLUMN `userSchool` VARCHAR(45) NULL AFTER `userCompany`;

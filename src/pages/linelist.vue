@@ -14,17 +14,17 @@
 import axios from 'axios'
 
 export default {
-  data() {
+  data () {
     return {
       lineList: {},
       showList: false
     }
   },
-  mounted() {
+  mounted () {
     this.getAllLines()
   },
   methods: {
-    getAllLines() {
+    getAllLines () {
       this.lineList = {}
       // 获取所有线路
       axios

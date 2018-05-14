@@ -19,6 +19,18 @@
     </mu-drawer>
     <!-- 选择站点 -->
     <mu-bottom-sheet :open="bottomSheet" @close="closeBottomSheet">
+      <!-- 标签 -->
+      <div class="chipBox">
+        <mu-chip class="chip" :to="'stationdetail/'+ addrs['家']">
+          <mu-avatar :size="28" icon="home" /> 家
+        </mu-chip>
+        <mu-chip class="chip" :to="'stationdetail/'+ addrs['公司']">
+          <mu-avatar :size="28" icon="business_center" /> 公司
+        </mu-chip>
+        <mu-chip class="chip" :to="'stationdetail/'+ addrs['学校']">
+          <mu-avatar :size="28" icon="school" /> 学校
+        </mu-chip>
+      </div>
       <mu-picker :slots="stationSlots" :visible-item-count="5" @change="stationChange" :values="stations" />
     </mu-bottom-sheet>
   </div>
@@ -37,7 +49,6 @@ export default {
       paths: this.$router.options.routes[0].children.slice(0, 6),
       hasTitie: false,
       userName: '',
-
       // 弹出框数据
       bottomSheet: false,
       lines: {},
@@ -47,7 +58,13 @@ export default {
       stationName: '',
       // 对应的站点中文和编码
       statMapping: {},
-      stationCode: ''
+      stationCode: '',
+      addrs: {
+        '家': '',
+        '公司': '',
+        '学校': ''
+      },
+      addr: ''
     }
   },
 
@@ -83,6 +100,7 @@ export default {
 
     // 底部弹出选择线路
     openBottomSheet () {
+      this.getAddrs()
       this.lines = {}
       // 获取所有线路
       axios
@@ -162,6 +180,19 @@ export default {
       } else {
         this.$router.push('login')
       }
+    },
+
+    // 获取常用地址
+    getAddrs () {
+      axios.post('/user/getaddrs', {
+        username: localStorage.getItem('userName')
+      }).then(res => {
+        this.addrs['家'] = res.data.msg[0].userHome
+        this.addrs['公司'] = res.data.msg[0].userCompany
+        this.addrs['学校'] = res.data.msg[0].userSchool
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
 }
@@ -183,7 +214,14 @@ export default {
     text-align: center;
     margin-right: 48px;
   }
-  .user {
+}
+
+.mu-bottom-sheet {
+  .chipBox {
+    padding: 20px 0 5% 5%;
+  }
+  .chip {
+    margin-right: 5%;
   }
 }
 </style>
