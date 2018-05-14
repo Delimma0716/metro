@@ -112,9 +112,9 @@ mapRouter.post('/getstinfo', (req, res) => {
       obj.retCode = 1
       obj.message = '查询成功'
       obj.data = {
-        position: getStPoiByCode(),//坐标
-        lines: getStFromDrw(),//所在路线
-        schedules: getStFromInfo()//首末班车
+        position: getStPoiByCode(), // 坐标
+        lines: getStFromDrw(), // 所在路线
+        schedules: getStFromInfo()// 首末班车
       }
       resolve(obj)
     })

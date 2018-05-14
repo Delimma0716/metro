@@ -1,7 +1,6 @@
 main function：
-1.添加常用地址
 2.设置到站提醒done 调用安卓
-4.去最近站点导航
+
 
 sub function：
 1.上传头像

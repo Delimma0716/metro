@@ -18,13 +18,15 @@
       </div>
     </div>
     <div class="bottom">
-      <div id="submap"></div>
+      <m-loading v-show="showLoading"></m-loading>
+      <div id="submap" v-show="!showLoading"></div>
     </div>
+    <mu-toast v-if="toast" message="定位失败" />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import Loading from '@/components/tools/loading'
 import axios from 'axios'
 
 export default {
@@ -41,12 +43,16 @@ export default {
       transfer: [],
       walking: [],
       driving: [],
-      currentPosition: []
+      currentPosition: [],
+      toast: false,
+      showLoading: false
     }
   },
   mounted () {
     this.getDetail()
-    this.getCurrentPoi()
+  },
+  components: {
+    'm-loading': Loading
   },
   methods: {
     getDetail () {
@@ -105,12 +111,14 @@ export default {
       AMap.plugin('AMap.Geolocation', () => {
         let geolocation = new AMap.Geolocation()
         this.map.addControl(geolocation)
-        geolocation.getCurrentPosition()
         AMap.event.addListener(geolocation, 'complete', (result) => {
-          console.log('----', result)
+          geolocation.getCurrentPosition()
         })
-        AMap.event.addListener(geolocation, 'error', (error) => {
-          console.log('----', error)
+        AMap.event.addListener(geolocation, 'error', () => {
+          this.toast = true
+          setTimeout(() => {
+            this.toast = false
+          }, 2000)
         })
       })
     },
@@ -120,10 +128,33 @@ export default {
         map: this.map,
         panel: 'submap'
       }
-      // 导航插件 步行
-      AMap.service(['AMap.Walking'], () => {
-        this.walking = new AMap.Walking(transOptions)
-        this.walking.search(this.currentPosition, this.position)
+      // 定位
+      this.map.plugin('AMap.Geolocation', () => {
+        let geolocation = new AMap.Geolocation()
+        this.showLoading = true
+        geolocation.getCurrentPosition((status, result) => {
+          if (status === 'complete') {
+            this.currentPosition = [result.position.lng, result.position.lat]
+            this.showLoading = false
+            console.log('------', this.currentPosition, this.position)
+            // 导航插件 步行 驾车 公交
+            AMap.service(['AMap.Walking', 'AMap.Driving'], () => {
+              this.walking = new AMap.Walking(transOptions)
+              this.walking.search(this.currentPosition, this.position)
+
+              this.driving = new AMap.Driving(transOptions)
+              this.driving.search(this.currentPosition, this.position)
+
+              this.transfer = new AMap.Transfer(transOptions)
+              this.transfer.search(this.currentPosition, this.position)
+            })
+          } else {
+            this.toast = true
+            setTimeout(() => {
+              this.toast = false
+            }, 2000)
+          }
+        })
       })
     },
     // 获取当前位置
@@ -164,7 +195,7 @@ export default {
     padding: 0 20px 5%;
     #submap {
       width: 100%;
-      height: 300px;
+      height: 600px;
     }
   }
 }
