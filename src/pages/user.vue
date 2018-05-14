@@ -52,7 +52,10 @@ export default {
       stationSlots: [],
       stations: [],
       stationLine: '',
-      stationName: ''
+      stationName: '',
+      // 对应的站点中文和编码
+      statMapping: {},
+      stationCode: ''
     }
   },
   mounted () {
@@ -85,8 +88,11 @@ export default {
             // 渲染数据
             let linename = (line.ln + ' ' + line.la).trim()
             this.lines[linename] = []
+            this.statMapping[linename] = []
             line.st.forEach(stat => {
+              // 同时需要名称和编码，以冒号分隔
               this.lines[linename].push(stat.n)
+              this.statMapping[linename].push({ statName: stat.n, statCode: stat.si })
             })
           })
           this.stationSlots = [
@@ -103,13 +109,14 @@ export default {
           ]
           this.stations = [
             Object.keys(this.lines)[0],
-            this.lines[Object.keys(this.lines)[0]][0]
+            this.lines[Object.keys(this.lines)[0]][0].split(':')[0]
           ]
           this.stationLine = this.stations[0]
           this.stationName = this.stations[1]
+          this.stationCode = this.statMapping[this.stationLine][0].statCode
           this.bottomSheet = true
           this.addrs[this.addr] = this.stationName
-          this.saveAddr(this.addr, this.stationName)
+          this.saveAddr(this.addr, this.stationName + ',' + this.stationCode)
         })
     },
 
@@ -131,18 +138,24 @@ export default {
           this.stationName = value
           break
       }
+      // 拿到对应的code
+      this.statMapping[this.stationLine].forEach(e => {
+        if (e.statName === this.stationName) {
+          this.stationCode = e.statCode
+        }
+      })
       this.stations = [this.stationLine, this.stationName]
       this.addrs[this.addr] = this.stationName
-      this.saveAddr(this.addr, this.stationName)
+      this.saveAddr(this.addr, this.stationName + ',' + this.stationCode)
     },
     // 获取常用地址
     getAddrs () {
       axios.post('/user/getaddrs', {
         username: localStorage.getItem('userName')
       }).then(res => {
-        this.addrs['家'] = res.data.msg[0].userHome
-        this.addrs['公司'] = res.data.msg[0].userCompany
-        this.addrs['学校'] = res.data.msg[0].userSchool
+        this.addrs['家'] = res.data.msg[0].userHome.split(',')[0]
+        this.addrs['公司'] = res.data.msg[0].userCompany.split(',')[0]
+        this.addrs['学校'] = res.data.msg[0].userSchool.split(',')[0]
       }).catch(err => {
         console.log(err)
       })

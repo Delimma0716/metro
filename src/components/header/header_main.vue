@@ -21,13 +21,13 @@
     <mu-bottom-sheet :open="bottomSheet" @close="closeBottomSheet">
       <!-- 标签 -->
       <div class="chipBox">
-        <mu-chip class="chip" :to="'stationdetail/'+ addrs['家']">
+        <mu-chip class="chip" v-if="addrs['家']" @click="search(addrs['家'])">
           <mu-avatar :size="28" icon="home" /> 家
         </mu-chip>
-        <mu-chip class="chip" :to="'stationdetail/'+ addrs['公司']">
+        <mu-chip class="chip" v-if="addrs['公司']" @click="search(addrs['公司'])">
           <mu-avatar :size="28" icon="business_center" /> 公司
         </mu-chip>
-        <mu-chip class="chip" :to="'stationdetail/'+ addrs['学校']">
+        <mu-chip class="chip" v-if="addrs['学校']" @click="search(addrs['学校'])">
           <mu-avatar :size="28" icon="school" /> 学校
         </mu-chip>
       </div>
@@ -193,6 +193,14 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+
+    // 点击常用地址
+    search (addr) {
+      this.closeBottomSheet()
+      let sn = addr.split(',')[0]
+      let sc = addr.split(',')[1]
+      this.$router.push('stationdetail/' + sc + '/' + sn)
     }
   }
 }
