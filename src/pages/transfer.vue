@@ -5,11 +5,23 @@
     <mu-text-field hintText="选择终点" fullWidth @focus="openBottomSheet(2)" v-model="endName" />
     <!-- 选择站点 -->
     <mu-bottom-sheet :open="bottomSheet" @close="closeBottomSheet">
+      <!-- 标签 -->
+      <div class="chipBox">
+        <mu-chip class="chip" v-if="addrs['家']" @click="setAddr(addrs['家'])">
+          <mu-avatar :size="28" icon="home" /> 家
+        </mu-chip>
+        <mu-chip class="chip" v-if="addrs['公司']" @click="setAddr(addrs['公司'])">
+          <mu-avatar :size="28" icon="business_center" /> 公司
+        </mu-chip>
+        <mu-chip class="chip" v-if="addrs['学校']" @click="setAddr(addrs['学校'])">
+          <mu-avatar :size="28" icon="school" /> 学校
+        </mu-chip>
+      </div>
       <mu-picker :slots="stationSlots" :visible-item-count="5" @change="stationChange" :values="stations" />
     </mu-bottom-sheet>
 
     <mu-raised-button label="确定" class="button-confirm" primary fullWidth @click="confirm" />
-    </div>
+  </div>
 </template>
 
 <script>
@@ -32,12 +44,19 @@ export default {
       stationName: '',
       // 对应的站点中文和编码
       statMapping: {},
-      stationCode: ''
+      stationCode: '',
+      addrs: {
+        '家': '',
+        '公司': '',
+        '学校': ''
+      },
+      addr: ''
     }
   },
   methods: {
     // 底部弹出选择线路
     openBottomSheet (tag) {
+      this.getAddrs()
       this.tag = tag
       this.lines = {}
       // 获取所有线路
@@ -127,9 +146,33 @@ export default {
       if (this.$store.state.startCode !== '' && this.$store.state.endCode !== '') {
         this.$router.push('/metromap')
       }
+    },
+    // 获取常用地址
+    getAddrs () {
+      axios.post('/user/getaddrs', {
+        username: localStorage.getItem('userName')
+      }).then(res => {
+        this.addrs['家'] = res.data.msg[0].userHome
+        this.addrs['公司'] = res.data.msg[0].userCompany
+        this.addrs['学校'] = res.data.msg[0].userSchool
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    // 点击常用地址
+    setAddr (addr) {
+      this.closeBottomSheet()
+      let sn = addr.split(',')[0]
+      // let sc = addr.split(',')[1]
+      if (this.tag === 1) {
+        this.startName = sn
+        this.$store.commit('setStartCode', this.startName)
+      } else {
+        this.endName = sn
+        this.$store.commit('setEndCode', this.endName)
+      }
     }
   }
-
 }
 </script>
 
@@ -142,6 +185,15 @@ export default {
   }
   .button-confirm {
     margin-top: 20px;
+  }
+}
+
+.mu-bottom-sheet {
+  .chipBox {
+    padding: 20px 0 5% 5%;
+  }
+  .chip {
+    margin-right: 5%;
   }
 }
 </style>
